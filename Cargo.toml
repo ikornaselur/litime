@@ -1,0 +1,10 @@
+[package]
+name = "litime"
+version = "0.1.0"
+authors = ["Axel Örn Sigurðsson <axel@absalon.is>"]
+
+[dependencies]
+colored = "1.6"
+textwrap = "0.10"
+rand = "0.5.5"
+chrono = "0.4"
