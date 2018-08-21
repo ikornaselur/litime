@@ -795,7 +795,7 @@ pub fn get_minute(time: String) -> Minute {
     minutes.insert("02:30", &[
 &["\"Get into the mood, Shirl!\" Lew said. \"The party's already started! Yippee! You dressed for a party, Harry?\" \"Yep. Something told me to put on dinner clothes when I went to bed tonight.\" \"I'm in mufti myself: white gloves and matching tennis shoes. But I'm sorry to report that Jo is still in her Dr. Dentons. What're you wearing, Shirl?\" \"My old drum majorette's outfit. The one I wore to the State Finals. Listen, we can't tie up the phones like this.\" \"Why not?\" said Harry. \"Who's going to call at ", "2:30 a.m.", " with a better idea? Yippee, to quote Lew, we're having a party! What're we serving, Lew?\" \"Beer, I guess. Haven't got any wine, have we, Jo?\" \"Just for cooking.\"", "Jack Finney", "The Night People"],
 &["At about ", "half past two", " she had been woken by the creak of footsteps out on the stairs. At first she had been frightened.", "Sarah Waters", "The Little Stranger"],
-&["Inc, I tried to pull her off about 0", "230", ", and there was this fucking… sound.", "David Foster Wallace", "Infinite Jest"],
+&["Inc, I tried to pull her off about ", "0230", ", and there was this fucking… sound.", "David Foster Wallace", "Infinite Jest"],
 &["It is ", "2.30am", " and I am tight. As a tick, as a lord, as a newt. Must write this down before the sublime memories fade and blur.", "William Boyd", "Any Human Heart"],
 ]);
     minutes.insert(
@@ -999,7 +999,7 @@ pub fn get_minute(time: String) -> Minute {
 &["It was ", "three in the morning", " when his taxi stopped by giant mounds of snow outside his hotel. He had not eaten in hours.", "Ian McEwan", "Solar"],
 &["Once I saw a figure I shall never forget. It was ", "three o'clock at night", ", as I was going home from Blacky as usual; it was a short-cut for me, and there would be nobody in the street at this time of night, I thought, especially not in this frightful cold.", "Max Frisch", "I'm Not Stiller"],
 &["Roused from her sleep, Freya Gaines groped for the switch of the vidphone; groggily she found it and snapped it on. 'Lo,' she mumbled, wondering what time it was. She made out the luminous dial of the clock beside the bed. ", "Three AM.", " Good grief.", "Philip K Dick", "The Game Players of Titan"],
-&["Schact clears his mouth and swallows mightily. 'Tavis can't even regrout tile in the locker room without calling a Community meeting or appointing a committee. The Regrouting Committee's been dragging along since may. Suddenly they're pulling secret 0", "300", " milk-switches? It doesn't ring true, Jim.", "David Foster Wallace", "Infinite Jest"],
+&["Schact clears his mouth and swallows mightily. 'Tavis can't even regrout tile in the locker room without calling a Community meeting or appointing a committee. The Regrouting Committee's been dragging along since may. Suddenly they're pulling secret ", "0300", " milk-switches? It doesn't ring true, Jim.", "David Foster Wallace", "Infinite Jest"],
 &["", "Three in the morning", ", thought Charles Halloway, seated on the edge of his bed. Why did the train come at that hour? For, he thought, it’s a special hour. Women never wake then, do they? They sleep the sleep of babes and children. But men in middle age? They know that hour well.", "Ray Bradbury", "Something Wicked This Way Comes"],
 &["What's the time?\" said the man, eyeing George up and down with evident suspicion; \"why, if you listen you will hear it strike.\" George listened, and a neighbouring clock immediately obliged. \"But it's only gone ", "three", "!\" said George in an injured tone, when it had finished.", "Jerome K Jerome", "Three Men in a Boat"],
 &["When Sophie awoke, it was ", "3:00 a.m.", "", "Paula Fox", "Desperate Characters"],
@@ -1390,8 +1390,8 @@ pub fn get_minute(time: String) -> Minute {
 ]);
     minutes.insert("04:30", &[
 &["At the end of a relationship, it is the one who is not in love who makes the tender speeches. I was overwhelmed by a sense of betrayal, betrayal because a union in which I had invested so much had been declared bankrupt without my feeling it to be so. Chloe had not given it a chance, I argued with myself, knowing the hopelessness of these inner courts announcing hollow verdicts at ", "four thirty", " in the morning.", "Alain de Botton", "Essays on Love"],
-&["Hester Thrale undulates in in a false fox jacket at 2330 as usual even though she has to be up at like 0", "430", " for the breakfast shift at the Provident Nursing Home and sometimes eats breakfast with Gately, both their faces nodding perilously close to their Frosted Flakes.", "David Foster Wallace", "Infinite Jest"],
-&["Tonight Clenette H. and the deeply whacked out Yolanda W. come back in from Footprints around 2315 in purple skirts and purple lipstick and ironed hair, tottering on heels and telling each other what a wicked time they just had. Hester Thrale undulates in in a false fox jacket at 2330 as usual even though she has to be up at like 0", "430", " for the breakfast shift at the Provident Nursing Home and sometimes eats breakfast with Gately, both their faces nodding perilously close to their Frosted Flakes.", "David Foster Wallace", "Infinite Jest"],
+&["Hester Thrale undulates in in a false fox jacket at 2330 as usual even though she has to be up at like ", "0430", " for the breakfast shift at the Provident Nursing Home and sometimes eats breakfast with Gately, both their faces nodding perilously close to their Frosted Flakes.", "David Foster Wallace", "Infinite Jest"],
+&["Tonight Clenette H. and the deeply whacked out Yolanda W. come back in from Footprints around 2315 in purple skirts and purple lipstick and ironed hair, tottering on heels and telling each other what a wicked time they just had. Hester Thrale undulates in in a false fox jacket at 2330 as usual even though she has to be up at like ", "0430", " for the breakfast shift at the Provident Nursing Home and sometimes eats breakfast with Gately, both their faces nodding perilously close to their Frosted Flakes.", "David Foster Wallace", "Infinite Jest"],
 ]);
     minutes.insert(
         "04:31",
@@ -1521,7 +1521,7 @@ pub fn get_minute(time: String) -> Minute {
 &["He wants to look death in the face. ", "Two minutes to five", ". I took a handkerchief out of my pocket, but John Dawson ordered me to put it back. An Englishman dies with his eyes open. He wants to look death in the face.", "Elie Wiesel", "Dawn: A Novel"],
 ]);
     minutes.insert("04:59", &[
-&["The whole place smells like death no matter what the fuck you do. Gately gets to the shelter at 0", "459", ".9h and just shuts his head off as if his head had a control switch.", "David Foster Wallace", "Infinite Jest"],
+&["The whole place smells like death no matter what the fuck you do. Gately gets to the shelter at ", "0459", ".9h and just shuts his head off as if his head had a control switch.", "David Foster Wallace", "Infinite Jest"],
 ]);
     minutes.insert("05:00", &[
 &["", "Five o'clock", " had hardly struck on the morning of the 19th of January, when Bessie brought a candle into my closet and found me already up and nearly dressed.", "Charlotte Brontë", "Jane Eyre"],
@@ -2562,15 +2562,15 @@ This last observation applied to the dark gallery, and was indicated by the comp
 &["When he woke, at ", "eight-thirty", ", he was alone in the bedroom. He put on his dressing gown and put in his hearing aid and went into the living room.", "David Lodge", "Deaf Sentence"],
 ]);
     minutes.insert("08:32", &[
-&["'Does anybody know the time a little more exactly is what I'm wondering, Don, since Day doesn't.' Gately checks his cheap digital, head still hung over the sofa's arm. 'I got 0", "832", ":14, 15, 16, Randy.' ''ks a lot, D.G. man.'", "David Foster Wallace", "Infinite Jest"],
+&["'Does anybody know the time a little more exactly is what I'm wondering, Don, since Day doesn't.' Gately checks his cheap digital, head still hung over the sofa's arm. 'I got ", "0832", ":14, 15, 16, Randy.' ''ks a lot, D.G. man.'", "David Foster Wallace", "Infinite Jest"],
 &["", "8.32 a.m.", " Catch bus to school", "Mark Haddon", "The Curious Incident Of The Dog In The Night-Time"],
 ]);
     minutes.insert("08:33", &[
-&["'Does anybody know the time a little more exactly is what I'm wondering, Don, since Day doesn't.' Gately checks his cheap digital, head still hung over the sofa's arm. 'I got 0", "832", ":14, 15, 16, Randy.' ''ks a lot, D.G. man.'", "David Foster Wallace", "Infinite Jest"],
+&["'Does anybody know the time a little more exactly is what I'm wondering, Don, since Day doesn't.' Gately checks his cheap digital, head still hung over the sofa's arm. 'I got ", "0832", ":14, 15, 16, Randy.' ''ks a lot, D.G. man.'", "David Foster Wallace", "Infinite Jest"],
 &["", "8.32 a.m.", " Catch bus to school", "Mark Haddon", "The Curious Incident Of The Dog In The Night-Time"],
 ]);
     minutes.insert("08:34", &[
-&["'Does anybody know the time a little more exactly is what I'm wondering, Don, since Day doesn't.' Gately checks his cheap digital, head still hung over the sofa's arm. 'I got 0", "832", ":14, 15, 16, Randy.' ''ks a lot, D.G. man.'", "David Foster Wallace", "Infinite Jest"],
+&["'Does anybody know the time a little more exactly is what I'm wondering, Don, since Day doesn't.' Gately checks his cheap digital, head still hung over the sofa's arm. 'I got ", "0832", ":14, 15, 16, Randy.' ''ks a lot, D.G. man.'", "David Foster Wallace", "Infinite Jest"],
 &["", "8.32 a.m.", " Catch bus to school", "Mark Haddon", "The Curious Incident Of The Dog In The Night-Time"],
 ]);
     minutes.insert("08:35", &[
@@ -2868,7 +2868,7 @@ This last observation applied to the dark gallery, and was indicated by the comp
         ]],
     );
     minutes.insert("09:15", &[
-&["\"Great!\" Jones commented. \"I've never seen it do that before. That's all right. Okay.\" Jones pulled a handful of pencils from his back pocket. \"Now, I got the contact first at 0", "915", " or so, and the bearing was about two-six-nine.\"", "Tom Clancy", "The Hunt for Red October"],
+&["\"Great!\" Jones commented. \"I've never seen it do that before. That's all right. Okay.\" Jones pulled a handful of pencils from his back pocket. \"Now, I got the contact first at ", "0915", " or so, and the bearing was about two-six-nine.\"", "Tom Clancy", "The Hunt for Red October"],
 &["", "9:15am", " doubled over pillow, sat up to see out window", "Steve Toltz", "A Fraction of the Whole"],
 &["", "9.15 a.m.", " First morning class", "Mark Haddon", "The Curious Incident of the Dog in the Night-time"],
 &["Miss Pettigrew pushed open the door of the employment agency and went in as the clock struck a ", "quarter past nine", ".", "Winifred Watson", "Miss Pettigrew Lives For a Day"],
@@ -3690,7 +3690,6 @@ This last observation applied to the dark gallery, and was indicated by the comp
         ]],
     );
     minutes.insert("12:00", &[
-&["'It will soon be an hour and a half,' said the girl who kept the records. The ", "noon", "day siren blew. 'Exactly a minute,' she said, looking at the stopwatch of which she was so proud.", "Yasunari Kawabata", "The Master of Go"],
 &["'There's nobody here!' I insisted. 'It was yourself, Mrs. Linton: you knew it a while since.' 'Myself!' she gasped, 'and the clock is striking ", "twelve", "!", "Emily Brontë", "Wuthering Heights"],
 &["A cheap little clock on the wall struck ", "twelve", " hurriedly, and served to begin the conversation.", "Fyodor Dostoyevsky", "The Brothers Karamazov"],
 &["He had saved [the republic] and it was now in the present, alive now and everywhere in the present, and the hovering faces brightened and blurred about him, became the sound of a canal in the morning, the look of some roofs in the ", "noon", " sun, and the fragrance of a certain evening flower. Here he was, home at last. Behind him were the mountains and the Sleeping Woman in the sky, and before him, like smoky flames in the sunset, the whole beautiful beloved city.", "Nick Joaquin", "The Woman Who Had Two Navels"],
@@ -6774,7 +6773,7 @@ This last observation applied to the dark gallery, and was indicated by the comp
     minutes.insert("22:00", &[
 &["By ", "ten", ", Quoyle was drunk. The crowd was enormous, crushed together so densely that Nutbeem could not force his way down the hall or to the door and urinated on the remaining potato chips in the blue barrel, setting a popular example.", "E. Annie Proulx", "The Shipping News"],
 &["Her body asserted itself with a restless movement of the knee, and she stood up. '", "Ten o'clock", ",' she remarked, apparently finding the time on the ceiling. 'Time for this good girl to go to bed.'", "F. Scott Fitzgerald", "The Great Gatsby"],
-&["I could not doubt that this was the BLACK SPOT; and taking it up, I found writ", "ten", " on the other side, in a very good, clear hand, this short message: \"You have till ten tonight.\"", "Robert Louis Stevenson", "Treasure Island"],
+&["I could not doubt that this was the BLACK SPOT; and taking it up, I found written on the other side, in a very good, clear hand, this short message: \"You have till ", "ten", " tonight.\"", "Robert Louis Stevenson", "Treasure Island"],
 &["I went back into the library, limp and exhausted. In a few minutes the telephone began ringing again. I did not do anything. I let it ring. I went and sat down at Maxim's feet. It went on ringing. I did not move. Presently it stopped, as though cut suddenly in exasperation. The clock on the mantelpiece struck ", "ten o'clock", ". Maxim put his arms round me and lifted me against him. We began to kiss one another, feverishly, desperately, like guilty lovers who have not kissed before.", "Daphne du Maurier", "Rebecca"],
 &["No one wanted to go to bed when at ", "ten o'clock", " Mrs. March put by the last finished job, and said, \"Come girls.\" Beth went to the piano and played the father's favorite hymn.", "Louisa May Alcott", "Little Women"],
 &["The grandfather clock in the State Room strikes ", "ten", " times.", "David Mitchell", "The Thousand Autumns of Jacob de Zoet"],

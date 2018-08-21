@@ -25,26 +25,4 @@ Benchmark #2: python script.py
 
 
 ### Attributions
-Built on top of the data from [JohannesNE/literature-clock](https://github.com/JohannesNE/literature-clock), though I think the data in this repo is out of date. Quick and dirty script I used to generate the `minutes.rs` file:
-
-```python
-from collections import OrderedDict
-
-for json_file in os.listdir('/path/to/times'):  # folder containing XX:XX.json files
-    with open(os.path.join('/Users/axel/Projects/literature-console/times', json_file), 'r') as f:
-        times[json_file.split('.')[0]] = json.load(f)
-
-times2 = OrderedDict(sorted(times.items()))
-
-with open('/tmp/rusted', 'w') as f:
-    for k,v in times2.items():
-        f.write(f'minutes.insert("{k}", &[\n')
-        for item in v:
-            first = item['quote_first'].replace('"', '\\"')
-            time = item['quote_time_case'].replace('"', '\\"')
-            rest = item['quote_last'].replace('"', '\\"')
-            author = item['author'].replace('"', '\\"')
-            title = item['title'].replace('"', '\\"')
-            f.write(f'&["{first}", "{time}", "{rest}", "{author}", "{title}"],\n')
-        f.write(']);\n')
-```
+Built on top of the data from [JohannesNE/literature-clock](https://github.com/JohannesNE/literature-clock), though I think the data in this repo is out of date. See `script.py` for quick and dirty script to update.
