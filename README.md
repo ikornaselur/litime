@@ -4,6 +4,10 @@ Literature time clock to use in your terminal. I personaly run it when I open a 
 
 It's very hacked together, just as fun for myself. I used to have a python script doing this, which was 10 times slower than the resulting rust binary. I want to potentially look into how to make it even faster, just to learn more about Rust.
 
+### Example
+
+![example](example.png)
+
 ### Benchmark with hyperfine
 ```
 Benchmark #1: litime
