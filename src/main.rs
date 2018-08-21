@@ -13,7 +13,12 @@ mod minute;
 
 fn main() {
     let local: DateTime<Local> = Local::now();
-    let now = format!("{}:{}", local.hour(), local.minute());
+    let now = format!(
+        "{:0width$}:{:0width$}",
+        local.hour(),
+        local.minute(),
+        width = 2
+    );
     let minute = get_minute(now);
     let result = format!(
         "{}{}{}",

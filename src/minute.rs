@@ -7307,9 +7307,13 @@ This last observation applied to the dark gallery, and was indicated by the comp
 &["Chigurgh rose and picked up the empty casing off the rug and blew into it and put it in his pocket and looked at his watch. The ", "new day was still a minute away", ".", "Cormac McCarthy", "No Country for Old Men"],
 ]);
 
-    let minute = minutes.get(time.as_str()).unwrap();
+    let minute = minutes
+        .get(time.as_str())
+        .expect(&format!("Couldn't find {:?}", time.as_str()));
     let mut rng = thread_rng();
-    let random = rng.choose(&minute).unwrap();
+    let random = rng
+        .choose(&minute)
+        .expect("Unable to choose a random quote");
 
     Minute {
         start: random[0],
