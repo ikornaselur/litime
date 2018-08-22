@@ -25,4 +25,4 @@ Benchmark #2: python script.py
 
 
 ### Attributions
-Built on top of the data from [JohannesNE/literature-clock](https://github.com/JohannesNE/literature-clock), though I think the data in this repo is out of date. See `script.py` for quick and dirty script to update.
+Built on top of the data from [JohannesNE/literature-clock](https://github.com/JohannesNE/literature-clock). See `script.py` for quick and dirty script to update.
