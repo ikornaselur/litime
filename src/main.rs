@@ -33,6 +33,7 @@ fn main() {
             .long("width")
             .value_name("width")
             .help("The max width of the quote")
+            .default_value("80")
             .takes_value(true),
         )
         .get_matches();
@@ -46,7 +47,7 @@ fn main() {
     );
 
     let timestamp = matches.value_of("time").unwrap_or(&now);
-    let width = value_t!(matches, "width", usize).unwrap_or(80);
+    let width = value_t!(matches, "width", usize).unwrap_or_else(|e| e.exit());
 
     let minute = get_minute(timestamp);
     let result = format!(
