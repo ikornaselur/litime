@@ -20,14 +20,20 @@ fn main() {
     let matches = App::new("Litime")
         .version(crate_version!())
         .about("Display a timestamp with a literature quote. By default, the current time stamp is used.")
-        .arg(
-            Arg::with_name("time")
-                .short("t")
-                .long("time")
-                .value_name("time")
-                .help("A timestamp to get a quote for, for example 07:16")
-                .validator(is_timestamp)
-                .takes_value(true),
+        .arg(Arg::with_name("time")
+            .short("t")
+            .long("time")
+            .value_name("time")
+            .help("A timestamp to get a quote for, for example 07:16")
+            .validator(is_timestamp)
+            .takes_value(true),
+        )
+        .arg(Arg::with_name("width")
+            .short("w")
+            .long("width")
+            .value_name("width")
+            .help("The max width of the quote")
+            .takes_value(true),
         )
         .get_matches();
 
@@ -40,6 +46,7 @@ fn main() {
     );
 
     let timestamp = matches.value_of("time").unwrap_or(&now);
+    let width = value_t!(matches, "width", usize).unwrap_or(80);
 
     let minute = get_minute(timestamp);
     let result = format!(
@@ -49,22 +56,15 @@ fn main() {
         minute.end.bright_black()
     );
 
-    let result = fill(&result, 80);
+    let result = fill(&result, width);
+    let mut output = String::from("\n  \" ");
 
-    let mut lines = result.lines();
-
-    let mut output = String::from("\n");
-
-    // Print first line with a quote mark
-    if let Some(line) = lines.next() {
-        output.push_str(format!("  \" {}\n", line).as_str());
-    }
-    // Then rest of the lines just indented
-    for line in lines {
-        output.push_str(format!("    {}\n", line).as_str());
+    for line in result.lines() {
+        output.push_str(line);
+        output.push_str("\n    ");
     }
     output.push('\n');
-    output.push_str(format!("        {} - {}", minute.author, minute.title).as_str());
+    output.push_str(format!("        {} - {}\n", minute.author, minute.title).as_str());
     print!("{}", output);
 }
 
