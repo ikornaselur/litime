@@ -1,4 +1,5 @@
 extern crate chrono;
+#[macro_use]
 extern crate clap;
 extern crate colored;
 extern crate rand;
@@ -17,7 +18,7 @@ mod minute;
 
 fn main() {
     let matches = App::new("Litime")
-        .version("0.2.0")
+        .version(crate_version!())
         .about("Display a timestamp with a literature quote. By default, the current time stamp is used.")
         .arg(
             Arg::with_name("time")
