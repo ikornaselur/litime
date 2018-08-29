@@ -41,7 +41,7 @@ fn main() {
 
     let timestamp = matches.value_of("time").unwrap_or(&now);
 
-    let minute = get_minute(timestamp.to_string());
+    let minute = get_minute(timestamp);
     let result = format!(
         "{}{}{}",
         minute.start.bright_black(),
@@ -53,17 +53,19 @@ fn main() {
 
     let mut lines = result.lines();
 
-    println!("");
+    let mut output = String::from("\n");
+
     // Print first line with a quote mark
     if let Some(line) = lines.next() {
-        println!("  \" {}", line);
+        output.push_str(format!("  \" {}\n", line).as_str());
     }
     // Then rest of the lines just indented
-    while let Some(line) = lines.next() {
-        println!("    {}", line);
+    for line in lines {
+        output.push_str(format!("    {}\n", line).as_str());
     }
-    println!("");
-    println!("        {} - {}", minute.author, minute.title);
+    output.push('\n');
+    output.push_str(format!("        {} - {}", minute.author, minute.title).as_str());
+    print!("{}", output);
 }
 
 fn is_timestamp(val: String) -> Result<(), String> {

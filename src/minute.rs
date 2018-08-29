@@ -10,7 +10,7 @@ pub struct Minute {
     pub end: &'static str,
 }
 
-pub fn get_minute(time: String) -> Minute {
+pub fn get_minute(time: &str) -> Minute {
     let mut minutes: HashMap<&str, &[&[&str]]> = HashMap::new();
 
     minutes.insert("00:00", &[
@@ -7308,8 +7308,8 @@ This last observation applied to the dark gallery, and was indicated by the comp
 ]);
 
     let minute = minutes
-        .get(time.as_str())
-        .expect(&format!("Couldn't find {:?}", time.as_str()));
+        .get(time)
+        .unwrap_or_else(|| panic!("Couldn't find {:?}", time));
     let mut rng = thread_rng();
     let random = rng
         .choose(&minute)
