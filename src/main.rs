@@ -10,7 +10,7 @@ use chrono::prelude::*;
 use clap::{App, Arg};
 use colored::*;
 use regex::Regex;
-use textwrap::fill;
+use textwrap::wrap_iter;
 
 use minute::get_minute;
 
@@ -57,11 +57,10 @@ fn main() {
         minute.end.bright_black()
     );
 
-    let result = fill(&result, width);
     let mut output = String::from("\n  \" ");
 
-    for line in result.lines() {
-        output.push_str(line);
+    for line in wrap_iter(&result, width) {
+        output.push_str(&line);
         output.push_str("\n    ");
     }
     output.push('\n');
