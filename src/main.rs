@@ -23,6 +23,7 @@ fn main() {
         .arg(
             Arg::with_name("time")
                 .short("t")
+                .long("time")
                 .value_name("time")
                 .help("A timestamp to get a quote for, for example 07:16")
                 .validator(is_timestamp)
