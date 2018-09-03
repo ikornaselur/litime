@@ -1,3 +1,4 @@
+# flake8: noqa
 import json
 import os
 from collections import OrderedDict
@@ -15,12 +16,15 @@ times2 = OrderedDict(sorted(times.items()))
 
 with open("/tmp/rusted", "w") as f:
     for k, v in times2.items():
-        f.write(f'minutes.insert("{k}", &[\n')
+        key = k.replace("_", ":")
+        f.write(f'    minutes.insert("{key}", &[\n')
         for item in v:
             first = item["quote_first"].replace('"', '\\"')
             time = item["quote_time_case"].replace('"', '\\"')
             rest = item["quote_last"].replace('"', '\\"')
             author = item["author"].replace('"', '\\"')
             title = item["title"].replace('"', '\\"')
-            f.write(f'&["{first}", "{time}", "{rest}", "{author}", "{title}"],\n')
-        f.write("]);\n")
+            f.write(
+                f'        &["{first}", "{time}", "{rest}", "{author}", "{title}"],\n'
+            )
+        f.write("    ]);\n")
