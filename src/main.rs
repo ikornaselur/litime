@@ -7,7 +7,7 @@ extern crate regex;
 extern crate textwrap;
 
 use chrono::prelude::*;
-use clap::{App, Arg};
+use clap::{App, AppSettings, Arg};
 use colored::*;
 use regex::Regex;
 use textwrap::wrap_iter;
@@ -19,6 +19,7 @@ mod minute;
 fn main() {
     let matches = App::new("Litime")
         .version(crate_version!())
+        .setting(AppSettings::ColoredHelp)
         .about("Display a timestamp with a literature quote. By default, the current time stamp is used.")
         .arg(Arg::with_name("time")
             .short("t")
