@@ -1,20 +1,18 @@
 extern crate chrono;
 #[macro_use]
 extern crate clap;
-extern crate colored;
 extern crate rand;
 extern crate regex;
 extern crate textwrap;
 
 use chrono::prelude::*;
 use clap::{App, AppSettings, Arg};
-use colored::*;
 use regex::Regex;
-use textwrap::wrap_iter;
 
 use minute::get_minute;
 
 mod minute;
+mod wrapper;
 
 fn main() {
     let matches = App::new("Litime")
@@ -51,22 +49,7 @@ fn main() {
     let width = value_t!(matches, "width", usize).unwrap_or_else(|e| e.exit());
 
     let minute = get_minute(timestamp);
-    let result = format!(
-        "{}{}{}",
-        minute.start.bright_black(),
-        minute.time.red(),
-        minute.end.bright_black()
-    );
-
-    let mut output = String::from("\n  \" ");
-
-    for line in wrap_iter(&result, width) {
-        output.push_str(&line);
-        output.push_str("\n    ");
-    }
-    output.push('\n');
-    output.push_str(format!("        {} - {}\n", minute.author, minute.title).as_str());
-    print!("{}", output);
+    print!("{}", minute.wrapped(width));
 }
 
 fn is_timestamp(val: String) -> Result<(), String> {
