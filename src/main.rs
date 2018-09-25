@@ -1,7 +1,6 @@
 extern crate chrono;
 #[macro_use]
 extern crate clap;
-extern crate colored;
 extern crate rand;
 extern crate regex;
 extern crate textwrap;
