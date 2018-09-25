@@ -1,6 +1,6 @@
 [package]
 name = "litime"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["Axel Örn Sigurðsson <axel@absalon.is>"]
 
 [dependencies]
