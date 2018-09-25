@@ -10,7 +10,6 @@ use clap::{App, AppSettings, Arg};
 use regex::Regex;
 
 use minute::get_minute;
-use wrapper::wrap_minute;
 
 mod minute;
 mod wrapper;
@@ -50,8 +49,7 @@ fn main() {
     let width = value_t!(matches, "width", usize).unwrap_or_else(|e| e.exit());
 
     let minute = get_minute(timestamp);
-    let output = wrap_minute(minute, width);
-    print!("{}", output);
+    print!("{}", minute.wrapped(width));
 }
 
 fn is_timestamp(val: String) -> Result<(), String> {
