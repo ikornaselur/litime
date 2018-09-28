@@ -1,11 +1,10 @@
 [package]
 name = "litime"
-version = "0.2.2"
+version = "0.2.3"
 authors = ["Axel Örn Sigurðsson <axel@absalon.is>"]
 description = "A command line tool to display the current time ish with a literature quote"
 repository = "https://github.com/ikornaselur/litime"
 license = "CC-BY-NC-SA-2.5"
-license-file = "LICENSE.md"
 
 [dependencies]
 textwrap = "0.10"

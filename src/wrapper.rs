@@ -33,47 +33,47 @@ impl Minute {
             output.push('\n');
             let line_len = line.len() - INDENT_LEN;
 
+            let mut string = String::from(line);
+
             if line_len < count {
                 // If the count for the current part of the quote is higher than the current line, just
                 // continue on
                 count -= line_len;
-                output.push_str(&line);
+                output.push_str(string.as_str());
             } else if !red {
                 // The current line is longer than the current part and we haven't started the red
                 // section, so insert the code for red
                 red = true;
 
-                let mut s = String::from(line);
-
-                s.insert_str(count + INDENT_LEN, RED);
+                string.insert_str(count + INDENT_LEN, RED);
                 count += time_len;
 
                 // Check if the red section is not long enough to be split into a different line
                 if count < line_len {
                     black = true;
-                    s.insert_str(count + RED.len() + INDENT_LEN, BLACK);
+                    string.insert_str(count + RED.len() + INDENT_LEN, BLACK);
                 } else {
                     count -= line_len;
                 }
 
-                output.push_str(s.as_str());
+                output.push_str(string.as_str());
             } else if !black {
                 // End the red section
                 black = true;
 
-                let mut s = String::from(line);
-
-                s.insert_str(count + INDENT_LEN, BLACK);
+                string.insert_str(count + INDENT_LEN, BLACK);
                 count += time_len;
 
-                output.push_str(s.as_str());
+                output.push_str(string.as_str());
             } else {
                 // Just keep adding the final lines
-                output.push_str(&line);
+                output.push_str(string.as_str());
             }
 
-            if count > 0 {
-                count -= 1; // Account for spaces that would be between the words in different lines
+            // Account for spaces that would be between the words in different lines, but if a line
+            // ends with a dash, there was no space between the words
+            if count > 0 && !string.ends_with('-') {
+                count -= 1;
             }
         }
 
@@ -177,6 +177,35 @@ mod test {
             format!("  \" foo {}bar", RED),
             String::new(),
             format!("{}        author - title", WHITE),
+            String::new(),
+        ].join("\n");
+
+        assert_eq!(wrapped, expected);
+    }
+
+    #[test]
+    fn issues_4() {
+        let minute = Minute {
+            start: "At 10.15 Arlena departed from her rondezvous, a minute or two later Patrick Redfern came down and registered surprise, annoyance, etc. Christine's task was easy enough. Keeping her own watch concealed she asked Linda at twenty-five past eleven what time it was. Linda looked at her watch and replied that it was a ",
+            time: "quarter to twelve",
+            end: ".",
+            author: "Agatha Christie",
+            title:"Evil under the Sun",
+        };
+
+        let wrapped = minute.wrapped(50);
+        let expected = [
+            String::from(BLACK),
+            String::from("  \" At 10.15 Arlena departed from her rondezvous,"),
+            String::from("    a minute or two later Patrick Redfern came"),
+            String::from("    down and registered surprise, annoyance, etc."),
+            String::from("    Christine\'s task was easy enough. Keeping her"),
+            String::from("    own watch concealed she asked Linda at twenty-"),
+            String::from("    five past eleven what time it was."),
+            String::from("    Linda looked at her watch and replied that it"),
+            format!("    was a {}quarter to twelve{}.", RED, BLACK),
+            String::new(),
+            format!("{}        Agatha Christie - Evil under the Sun", WHITE),
             String::new(),
         ].join("\n");
 
