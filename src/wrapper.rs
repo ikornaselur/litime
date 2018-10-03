@@ -4,11 +4,13 @@ use minute::Minute;
 
 static INITIAL_INDENT: &'static str = "  \" ";
 static SUBSEQUENT_INDENT: &'static str = "    ";
+static FOOTER_INDENT: &'static str = "        ";
 const INDENT_LEN: usize = 4;
 
 static BLACK: &'static str = "\u{1b}[90m";
 static RED: &'static str = "\u{1b}[31m";
 static WHITE: &'static str = "\u{1b}[97m";
+static RESET: &'static str = "\u{1b}[0m";
 
 impl Minute {
     pub fn wrapped(&self, width: usize) -> String {
@@ -76,13 +78,18 @@ impl Minute {
                 count -= 1;
             }
         }
+        output.push_str(format!("\n{}\n", WHITE).as_str());
 
-        output.push_str(
-            format!(
-                "\n\n{}{}{}{} - {}\n",
-                WHITE, SUBSEQUENT_INDENT, SUBSEQUENT_INDENT, self.author, self.title
-            ).as_str(),
-        );
+        let footer_wrapper = Wrapper::new(width)
+            .initial_indent(FOOTER_INDENT)
+            .subsequent_indent(FOOTER_INDENT);
+
+        let footer = format!("{} - {}", self.author, self.title);
+        let footer_lines = footer_wrapper.wrap(footer.as_str());
+
+        output.push_str(footer_lines.join("\n").as_str());
+
+        output.push_str(format!("\n{}", RESET).as_str());
 
         output
     }
@@ -109,9 +116,10 @@ mod test {
             format!("    black {}red red", RED),
             format!("    red red{} black", BLACK),
             String::from("    black black "),
-            String::new(),
-            format!("{}        author - title", WHITE),
-            String::new(),
+            String::from(WHITE),
+            String::from("        author -"),
+            String::from("        title"),
+            String::from(RESET),
         ].join("\n");
 
         assert_eq!(wrapped, expected);
@@ -131,9 +139,9 @@ mod test {
         let expected = [
             String::from(BLACK),
             format!("  \" foo {}bar{} baz", RED, BLACK),
-            String::new(),
-            format!("{}        author - title", WHITE),
-            String::new(),
+            String::from(WHITE),
+            String::from("        author - title"),
+            String::from(RESET),
         ].join("\n");
 
         assert_eq!(wrapped, expected);
@@ -153,9 +161,9 @@ mod test {
         let expected = [
             String::from(BLACK),
             format!("  \" {}bar{} baz", RED, BLACK),
-            String::new(),
-            format!("{}        author - title", WHITE),
-            String::new(),
+            String::from(WHITE),
+            String::from("        author - title"),
+            String::from(RESET),
         ].join("\n");
 
         assert_eq!(wrapped, expected);
@@ -175,22 +183,22 @@ mod test {
         let expected = [
             String::from(BLACK),
             format!("  \" foo {}bar", RED),
-            String::new(),
-            format!("{}        author - title", WHITE),
-            String::new(),
+            String::from(WHITE),
+            String::from("        author - title"),
+            String::from(RESET),
         ].join("\n");
 
         assert_eq!(wrapped, expected);
     }
 
     #[test]
-    fn issues_4() {
+    fn issue_4() {
         let minute = Minute {
             start: "At 10.15 Arlena departed from her rondezvous, a minute or two later Patrick Redfern came down and registered surprise, annoyance, etc. Christine's task was easy enough. Keeping her own watch concealed she asked Linda at twenty-five past eleven what time it was. Linda looked at her watch and replied that it was a ",
             time: "quarter to twelve",
             end: ".",
             author: "Agatha Christie",
-            title:"Evil under the Sun",
+            title: "Evil under the Sun",
         };
 
         let wrapped = minute.wrapped(50);
@@ -204,9 +212,36 @@ mod test {
             String::from("    five past eleven what time it was."),
             String::from("    Linda looked at her watch and replied that it"),
             format!("    was a {}quarter to twelve{}.", RED, BLACK),
-            String::new(),
-            format!("{}        Agatha Christie - Evil under the Sun", WHITE),
-            String::new(),
+            String::from(WHITE),
+            String::from("        Agatha Christie - Evil under the Sun"),
+            String::from(RESET),
+        ].join("\n");
+
+        assert_eq!(wrapped, expected);
+    }
+
+    #[test]
+    fn issue_6() {
+        let minute = Minute {
+            start: "And the first stop had been at ",
+            time: "1.16pm",
+            end: " which was 17 minutes later.",
+            author: "Mark Haddon",
+            title: "The Curious Incident of the Dog in the Night-Time",
+        };
+
+        let wrapped = minute.wrapped(30);
+        let expected = [
+            String::from(BLACK),
+            String::from("  \" And the first stop had"),
+            format!("    been at {}1.16pm{} which was", RED, BLACK),
+            String::from("    17 minutes later."),
+            String::from(WHITE),
+            String::from("        Mark Haddon - The"),
+            String::from("        Curious Incident of"),
+            String::from("        the Dog in the Night-"),
+            String::from("        Time"),
+            String::from(RESET),
         ].join("\n");
 
         assert_eq!(wrapped, expected);
