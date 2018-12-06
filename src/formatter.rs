@@ -1,6 +1,6 @@
 use textwrap::Wrapper;
 
-use minute::Minute;
+use crate::minute::Minute;
 
 static INITIAL_INDENT: &'static str = "  \" ";
 static SUBSEQUENT_INDENT: &'static str = "    ";

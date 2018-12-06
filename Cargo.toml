@@ -6,6 +6,7 @@ description = "A command line tool to display the current time ish with a litera
 repository = "https://github.com/ikornaselur/litime"
 license = "CC-BY-NC-SA-2.5"
 readme = "readme.md"
+edition = "2018"
 
 [dependencies]
 textwrap = "0.10"

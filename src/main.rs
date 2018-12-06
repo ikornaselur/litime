@@ -14,7 +14,7 @@ use chrono::prelude::*;
 use clap::{App, AppSettings, Arg};
 use regex::Regex;
 
-use minute::get_minute;
+use crate::minute::get_minute;
 
 mod formatter;
 mod minute;
