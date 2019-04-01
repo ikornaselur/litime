@@ -3,13 +3,6 @@ extern crate clap;
 #[macro_use]
 extern crate serde_derive;
 
-extern crate chrono;
-extern crate rand;
-extern crate regex;
-extern crate serde;
-extern crate serde_json;
-extern crate textwrap;
-
 use chrono::prelude::*;
 use clap::{App, AppSettings, Arg};
 use regex::Regex;

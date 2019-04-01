@@ -1,6 +1,6 @@
 lint:
 	@touch src/*.rs
-	@cargo +nightly clippy
+	@cargo clippy
 
 build_osx_release:
 	mkdir -p artifacts
