@@ -1,7 +1,5 @@
-# flake8: noqa
 import json
 import os
-from collections import OrderedDict
 
 times = {}
 # folder containing XX:XX.json files
