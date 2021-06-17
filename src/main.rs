@@ -12,10 +12,10 @@ use crate::minute::get_minute;
 mod formatter;
 mod minute;
 
-static COLOUR_HELP: &'static str = "Available colours are black, red, green, yellow, blue, magenta, cyan, white.\nEach colour can be prefixed with 'bright-'.";
-static DEFAULT_MAIN: &'static str = "bright-black";
-static DEFAULT_TIME: &'static str = "red";
-static DEFAULT_AUTHOR: &'static str = "white";
+static COLOUR_HELP: & str = "Available colours are black, red, green, yellow, blue, magenta, cyan, white.\nEach colour can be prefixed with 'bright-'.";
+static DEFAULT_MAIN: &str = "bright-black";
+static DEFAULT_TIME: &str = "red";
+static DEFAULT_AUTHOR: &str = "white";
 
 fn main() {
     let matches = App::new("Litime")
@@ -104,6 +104,6 @@ fn is_colour(val: String) -> Result<(), String> {
     if re.is_match(&val) {
         Ok(())
     } else {
-        Err(format!("Unknown colour.\n{}", COLOUR_HELP).to_string())
+        Err(format!("Unknown colour.\n{}", COLOUR_HELP))
     }
 }

@@ -2,9 +2,9 @@ use textwrap::{fill, Options};
 
 use crate::minute::Minute;
 
-static INITIAL_INDENT: &'static str = "  \" ";
-static SUBSEQUENT_INDENT: &'static str = "    ";
-static FOOTER_INDENT: &'static str = "        ";
+static INITIAL_INDENT: &str = "  \" ";
+static SUBSEQUENT_INDENT: &str = "    ";
+static FOOTER_INDENT: &str = "        ";
 
 fn get_colour(name: &str) -> &str {
     match name {
@@ -24,7 +24,7 @@ fn get_colour(name: &str) -> &str {
         "bright-magenta" => "\u{1b}[95m",
         "bright-cyan" => "\u{1b}[96m",
         "bright-white" => "\u{1b}[97m",
-        "reset" | _ => "\u{1b}[0m",
+        _ => "\u{1b}[0m",
     }
 }
 
