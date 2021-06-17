@@ -54,6 +54,7 @@ impl Minute {
 #[cfg(test)]
 mod test {
     use super::*;
+    use pretty_assertions::assert_eq;
 
     #[test]
     fn wrapped_quote() {
@@ -189,10 +190,10 @@ mod test {
             String::from("    down and registered surprise, annoyance, etc."),
             String::from("    Christine\'s task was easy enough. Keeping her"),
             String::from("    own watch concealed she asked Linda at twenty-"),
-            String::from("    five past eleven what time it was."),
-            String::from("    Linda looked at her watch and replied that it"),
+            String::from("    five past eleven what time it was. Linda"),
+            String::from("    looked at her watch and replied that it was a"),
             format!(
-                "    was a {}quarter to twelve{}.{}\n",
+                "    {}quarter to twelve{}.{}\n",
                 get_colour("red"),
                 get_colour("bright-black"),
                 get_colour("reset")
