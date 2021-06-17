@@ -10,7 +10,7 @@ build_osx_release:
 
 build_linux_release:
 	mkdir -p artifacts
-	docker run --rm -it -v "$(PWD)":/home/rust/src omnijar/rust:linux-musl /bin/bash -c "cargo build --release && strip target/x86_64-unknown-linux-musl/release/litime"
+	docker run --rm -it -v "$(PWD)":/home/rust/src ekidd/rust-musl-builder /bin/bash -c "cargo build --release && strip target/x86_64-unknown-linux-musl/release/litime"
 	mv target/x86_64-unknown-linux-musl/release/litime artifacts/litime-linux
 
 build_release: build_osx_release build_linux_release
