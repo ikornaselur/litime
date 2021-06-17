@@ -1,4 +1,4 @@
-use textwrap::Wrapper;
+use textwrap::{fill, Options};
 
 use crate::minute::Minute;
 
@@ -33,15 +33,15 @@ impl Minute {
         let quote = format!("\x02{}\x03{}\x02{}\x00", self.start, self.time, self.end);
         let footer = format!("\x01{} – {}\x00", self.author, self.title);
 
-        let quote_wrapper = Wrapper::new(width)
+        let quote_options = Options::new(width)
             .initial_indent(INITIAL_INDENT)
             .subsequent_indent(SUBSEQUENT_INDENT);
-        let footer_wrapper = Wrapper::new(width)
+        let footer_options = Options::new(width)
             .initial_indent(FOOTER_INDENT)
             .subsequent_indent(FOOTER_INDENT);
 
-        let quote = quote_wrapper.wrap(quote.as_str()).join("\n");
-        let footer = footer_wrapper.wrap(footer.as_str()).join("\n");
+        let quote = fill(quote.as_str(), &quote_options);
+        let footer = fill(footer.as_str(), &footer_options);
 
         format!("\n{}\n\n{}\n", quote, footer)
             .replace('\x00', get_colour("reset"))
@@ -73,7 +73,8 @@ mod test {
             format!("    black black{}\n", get_colour("reset")),
             format!("        {}author –", get_colour("white")),
             format!("        title{}\n", get_colour("reset")),
-        ].join("\n");
+        ]
+        .join("\n");
 
         assert_eq!(formatted, expected);
     }
@@ -102,7 +103,8 @@ mod test {
                 get_colour("white"),
                 get_colour("reset")
             ),
-        ].join("\n");
+        ]
+        .join("\n");
 
         assert_eq!(formatted, expected);
     }
@@ -131,7 +133,8 @@ mod test {
                 get_colour("white"),
                 get_colour("reset")
             ),
-        ].join("\n");
+        ]
+        .join("\n");
 
         assert_eq!(formatted, expected);
     }
@@ -160,7 +163,8 @@ mod test {
                 get_colour("white"),
                 get_colour("reset")
             ),
-        ].join("\n");
+        ]
+        .join("\n");
 
         assert_eq!(formatted, expected);
     }
@@ -198,7 +202,8 @@ mod test {
                 get_colour("white"),
                 get_colour("reset")
             ),
-        ].join("\n");
+        ]
+        .join("\n");
 
         assert_eq!(formatted, expected);
     }
@@ -229,7 +234,8 @@ mod test {
             String::from("        Curious Incident of"),
             String::from("        the Dog in the Night-"),
             format!("        Time{}\n", get_colour("reset")),
-        ].join("\n");
+        ]
+        .join("\n");
 
         assert_eq!(formatted, expected);
     }

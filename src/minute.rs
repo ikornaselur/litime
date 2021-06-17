@@ -1,4 +1,4 @@
-use rand::{thread_rng, Rng};
+use rand::seq::SliceRandom;
 use serde_json;
 use std::collections::HashMap;
 
@@ -20,8 +20,8 @@ pub fn get_minute(time: &str) -> Minute {
         .get(time)
         .unwrap_or_else(|| panic!("Couldn't find {:?}", time));
 
-    thread_rng()
-        .choose(&minute)
+    minute
+        .choose(&mut rand::thread_rng())
         .expect("Unable to choose a random quote")
         .clone()
 }
