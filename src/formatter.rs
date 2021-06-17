@@ -1,10 +1,10 @@
-use textwrap::Wrapper;
+use textwrap::{fill, Options};
 
 use crate::minute::Minute;
 
-static INITIAL_INDENT: &'static str = "  \" ";
-static SUBSEQUENT_INDENT: &'static str = "    ";
-static FOOTER_INDENT: &'static str = "        ";
+static INITIAL_INDENT: &str = "  \" ";
+static SUBSEQUENT_INDENT: &str = "    ";
+static FOOTER_INDENT: &str = "        ";
 
 fn get_colour(name: &str) -> &str {
     match name {
@@ -24,7 +24,7 @@ fn get_colour(name: &str) -> &str {
         "bright-magenta" => "\u{1b}[95m",
         "bright-cyan" => "\u{1b}[96m",
         "bright-white" => "\u{1b}[97m",
-        "reset" | _ => "\u{1b}[0m",
+        _ => "\u{1b}[0m",
     }
 }
 
@@ -33,15 +33,15 @@ impl Minute {
         let quote = format!("\x02{}\x03{}\x02{}\x00", self.start, self.time, self.end);
         let footer = format!("\x01{} – {}\x00", self.author, self.title);
 
-        let quote_wrapper = Wrapper::new(width)
+        let quote_options = Options::new(width)
             .initial_indent(INITIAL_INDENT)
             .subsequent_indent(SUBSEQUENT_INDENT);
-        let footer_wrapper = Wrapper::new(width)
+        let footer_options = Options::new(width)
             .initial_indent(FOOTER_INDENT)
             .subsequent_indent(FOOTER_INDENT);
 
-        let quote = quote_wrapper.wrap(quote.as_str()).join("\n");
-        let footer = footer_wrapper.wrap(footer.as_str()).join("\n");
+        let quote = fill(quote.as_str(), &quote_options);
+        let footer = fill(footer.as_str(), &footer_options);
 
         format!("\n{}\n\n{}\n", quote, footer)
             .replace('\x00', get_colour("reset"))
@@ -54,6 +54,7 @@ impl Minute {
 #[cfg(test)]
 mod test {
     use super::*;
+    use pretty_assertions::assert_eq;
 
     #[test]
     fn wrapped_quote() {
@@ -73,7 +74,8 @@ mod test {
             format!("    black black{}\n", get_colour("reset")),
             format!("        {}author –", get_colour("white")),
             format!("        title{}\n", get_colour("reset")),
-        ].join("\n");
+        ]
+        .join("\n");
 
         assert_eq!(formatted, expected);
     }
@@ -102,7 +104,8 @@ mod test {
                 get_colour("white"),
                 get_colour("reset")
             ),
-        ].join("\n");
+        ]
+        .join("\n");
 
         assert_eq!(formatted, expected);
     }
@@ -131,7 +134,8 @@ mod test {
                 get_colour("white"),
                 get_colour("reset")
             ),
-        ].join("\n");
+        ]
+        .join("\n");
 
         assert_eq!(formatted, expected);
     }
@@ -160,7 +164,8 @@ mod test {
                 get_colour("white"),
                 get_colour("reset")
             ),
-        ].join("\n");
+        ]
+        .join("\n");
 
         assert_eq!(formatted, expected);
     }
@@ -185,10 +190,10 @@ mod test {
             String::from("    down and registered surprise, annoyance, etc."),
             String::from("    Christine\'s task was easy enough. Keeping her"),
             String::from("    own watch concealed she asked Linda at twenty-"),
-            String::from("    five past eleven what time it was."),
-            String::from("    Linda looked at her watch and replied that it"),
+            String::from("    five past eleven what time it was. Linda"),
+            String::from("    looked at her watch and replied that it was a"),
             format!(
-                "    was a {}quarter to twelve{}.{}\n",
+                "    {}quarter to twelve{}.{}\n",
                 get_colour("red"),
                 get_colour("bright-black"),
                 get_colour("reset")
@@ -198,7 +203,8 @@ mod test {
                 get_colour("white"),
                 get_colour("reset")
             ),
-        ].join("\n");
+        ]
+        .join("\n");
 
         assert_eq!(formatted, expected);
     }
@@ -229,7 +235,8 @@ mod test {
             String::from("        Curious Incident of"),
             String::from("        the Dog in the Night-"),
             format!("        Time{}\n", get_colour("reset")),
-        ].join("\n");
+        ]
+        .join("\n");
 
         assert_eq!(formatted, expected);
     }
