@@ -13,7 +13,7 @@ pub struct Minute {
 const RAW_TIMES: &str = include_str!("times.json");
 
 pub fn get_minute(time: &str) -> Minute {
-    let minutes: HashMap<&str, Vec<Minute>> = serde_json::from_str(&RAW_TIMES).unwrap();
+    let minutes: HashMap<&str, Vec<Minute>> = serde_json::from_str(RAW_TIMES).unwrap();
 
     let minute = minutes
         .get(time)
