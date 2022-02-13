@@ -70,8 +70,6 @@ fn main() {
             .unwrap() as usize,
     );
 
-    println!("{}", width);
-
     print!(
         "{}",
         minute.formatted(
