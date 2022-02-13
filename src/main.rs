@@ -1,6 +1,7 @@
 extern crate clap;
 #[macro_use]
 extern crate serde_derive;
+extern crate termsize;
 
 use chrono::prelude::*;
 use clap::Parser;
@@ -15,6 +16,8 @@ static COLOUR_HELP: & str = "Available colours are black, red, green, yellow, bl
 static DEFAULT_MAIN: &str = "bright-black";
 static DEFAULT_TIME: &str = "red";
 static DEFAULT_AUTHOR: &str = "white";
+static MIN_WIDTH: usize = 20;
+static MAX_WIDTH: usize = 120;
 
 #[derive(Parser, Debug)]
 #[clap(version, about)]
@@ -24,20 +27,26 @@ struct Args {
     time: Option<String>,
 
     /// Colour of the quote, excluding the time
-    #[clap(short, long, validator = is_colour, default_value_t = DEFAULT_MAIN.to_string())]
+    #[clap(long, validator = is_colour, default_value_t = DEFAULT_MAIN.to_string())]
     main_colour: String,
 
     /// Colour of the time part of the quote
-    #[clap(short, long, validator = is_colour, default_value_t = DEFAULT_TIME.to_string())]
+    #[clap(long, validator = is_colour, default_value_t = DEFAULT_TIME.to_string())]
     time_colour: String,
 
     /// Colour of the author and book below the quote
-    #[clap(short, long, validator = is_colour, default_value_t = DEFAULT_AUTHOR.to_string())]
+    #[clap(long, validator = is_colour, default_value_t = DEFAULT_AUTHOR.to_string())]
     author_colour: String,
 
-    /// The max width of the quote
-    #[clap(short, long, default_value_t = 80)]
-    width: usize,
+    /// The number of columns for the quote, before wrapping into another line. If not set, then
+    /// litime will try to detect the width of the terminal window, up to MAX_WIDTH (default 120
+    /// columns)
+    #[clap(short, long)]
+    width: Option<usize>,
+
+    /// The max width of the quote when now set by the WIDTH option
+    #[clap(long, default_value_t = MAX_WIDTH)]
+    max_width: usize,
 }
 
 fn main() {
@@ -53,11 +62,20 @@ fn main() {
 
     let timestamp = args.time.unwrap_or(now);
     let minute = get_minute(&timestamp);
+    let max_width = args.max_width as u16;
+
+    let width: usize = args.width.unwrap_or(
+        termsize::get()
+            .map(|size| std::cmp::min(size.cols, max_width) - 10)
+            .unwrap() as usize,
+    );
+
+    println!("{}", width);
 
     print!(
         "{}",
         minute.formatted(
-            args.width,
+            std::cmp::max(width, MIN_WIDTH),
             &args.main_colour,
             &args.time_colour,
             &args.author_colour
