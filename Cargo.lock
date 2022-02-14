@@ -186,7 +186,6 @@ dependencies = [
  "clap",
  "pretty_assertions",
  "rand",
- "regex",
  "serde",
  "serde_derive",
  "serde_json",
