@@ -2,15 +2,17 @@ lint:
 	@touch src/*.rs
 	@cargo clippy
 
-build_osx_release:
-	mkdir -p artifacts
-	cargo build --release
-	mv target/release/litime artifacts/litime-osx
-	strip artifacts/litime-osx
+docker_build:
+	mkdir -p ./artifacts
+	docker build -t litime-builder -f builder/Dockerfile builder
 
-build_linux_release:
-	mkdir -p artifacts
-	docker run --rm -it -v "$(PWD)":/home/rust/src ekidd/rust-musl-builder /bin/bash -c "cargo build --release && strip target/x86_64-unknown-linux-musl/release/litime"
-	mv target/x86_64-unknown-linux-musl/release/litime artifacts/litime-linux
-
-build_release: build_osx_release build_linux_release
+build: docker_build
+	docker run -it \
+		-v `pwd`:/rust/build/litime \
+		-v `pwd`/artifacts:/output \
+		-e MINIFY="true" \
+		litime-builder
+	mv ./artifacts/apple/litime ./artifacts/litime-macos
+	mv ./artifacts/linux/litime ./artifacts/litime-linux
+	mv ./artifacts/windows/litime.exe ./artifacts/litime-win.exe
+	rm -rf ./artifacts/apple ./artifacts/linux ./artifacts/windows
