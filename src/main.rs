@@ -18,6 +18,8 @@ static DEFAULT_TIME: &str = "red";
 static DEFAULT_AUTHOR: &str = "white";
 static MIN_WIDTH: usize = 20;
 static MAX_WIDTH: usize = 120;
+static DEFAULT_WIDTH: usize = 80; // If we fail to get terminal width
+static MARGIN: usize = 5; // Margin on the right of the comment, only used when automatically detecting the terminal width
 
 #[derive(Parser, Debug)]
 #[clap(version, about)]
@@ -52,23 +54,23 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    let local: DateTime<Local> = Local::now();
-    let now = format!(
-        "{:0width$}:{:0width$}",
-        local.hour(),
-        local.minute(),
-        width = 2
-    );
-
-    let timestamp = args.time.unwrap_or(now);
+    let timestamp = args.time.unwrap_or_else(|| {
+        let local: DateTime<Local> = Local::now();
+        format!(
+            "{:0width$}:{:0width$}",
+            local.hour(),
+            local.minute(),
+            width = 2
+        )
+    });
     let minute = get_minute(&timestamp);
-    let max_width = args.max_width as u16;
+    let max_width = args.max_width;
 
-    let width: usize = args.width.unwrap_or(
+    let width: usize = args.width.unwrap_or_else(|| {
         termsize::get()
-            .map(|size| std::cmp::min(size.cols, max_width) - 10)
-            .unwrap() as usize,
-    );
+            .map(|size| std::cmp::min(size.cols as usize, max_width) - MARGIN)
+            .unwrap_or(DEFAULT_WIDTH)
+    });
 
     print!(
         "{}",
