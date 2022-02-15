@@ -1,8 +1,3 @@
-extern crate clap;
-#[macro_use]
-extern crate serde_derive;
-extern crate termsize;
-
 use chrono::prelude::*;
 use clap::Parser;
 
