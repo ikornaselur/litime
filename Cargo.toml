@@ -16,9 +16,7 @@ clap = { version = "3.0.14", features = ["derive"] }
 termsize = "0.1.6"
 
 [profile.release]
-codegen-units = 1
 lto = true
-panic = "abort"
 
 [dev-dependencies]
 pretty_assertions = "1.0.0"
