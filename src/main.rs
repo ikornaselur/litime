@@ -1,18 +1,31 @@
-extern crate clap;
-#[macro_use]
-extern crate serde_derive;
-extern crate termsize;
-
 use chrono::prelude::*;
 use clap::Parser;
-use regex::Regex;
 
 use crate::minute::get_minute;
 
 mod formatter;
 mod minute;
 
-static COLOUR_HELP: & str = "Available colours are black, red, green, yellow, blue, magenta, cyan, white.\nEach colour can be prefixed with 'bright-'.";
+static COLOURS: &[&str; 16] = &[
+    "bright-black",
+    "bright-blue",
+    "bright-cyan",
+    "bright-green",
+    "bright-magenta",
+    "bright-red",
+    "bright-white",
+    "bright-yellow",
+    "black",
+    "blue",
+    "cyan",
+    "green",
+    "magenta",
+    "red",
+    "white",
+    "yellow",
+];
+
+static COLOUR_HELP: &str = "Available colours are black, blue, cyan, green, magenta, red, white and yellow.\nEach colour can be prefixed with 'bright-'.";
 static DEFAULT_MAIN: &str = "bright-black";
 static DEFAULT_TIME: &str = "red";
 static DEFAULT_AUTHOR: &str = "white";
@@ -84,19 +97,16 @@ fn main() {
 }
 
 fn is_timestamp(val: &str) -> Result<(), String> {
-    let re = Regex::new(r"^([01][0-9]|2[0-3]):[0-5][0-9]$").unwrap();
-    if re.is_match(val) {
-        Ok(())
-    } else {
-        Err(String::from(
+    match NaiveTime::parse_from_str(val, "%H:%M") {
+        Ok(_) => Ok(()),
+        _ => Err(String::from(
             "The value must be a valid 24-hour timestamp in the format HH:MM",
-        ))
+        )),
     }
 }
 
 fn is_colour(val: &str) -> Result<(), String> {
-    let re = Regex::new(r"^(bright-)?(black|red|green|yellow|blue|magenta|cyan|white)$").unwrap();
-    if re.is_match(val) {
+    if COLOURS.iter().any(|&c| c == val) {
         Ok(())
     } else {
         Err(format!("Unknown colour.\n{}", COLOUR_HELP))
