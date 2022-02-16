@@ -7,7 +7,6 @@ A simple tool to display the current time with a quote from literature.
 _Running litime on shell startup_
 ![example](example.png)
 
-
 ## Attributions
 ### Source of quotes
 Built on top of the data from
