@@ -1,4 +1,4 @@
-FROM rust:1.58-alpine
+FROM rust:1.59-alpine
 
 # Add regular dependencies
 RUN apk add --no-cache curl jq git build-base bash zip

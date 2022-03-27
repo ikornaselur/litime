@@ -67,14 +67,6 @@ for BINARY in $BINARIES; do
         exit 1
     fi
 
-    info "Minifying ${OUTPUT}..."
-
-    info "Stripping..."
-    strip "${OUTPUT}" >&2 || info "Strip failed."
-    info "File stripped successfully."
-
-    info "Saving $OUTPUT..."
-
   # shellcheck disable=SC2086
   mv $OUTPUT "$OUTPUT_DIR" || error "Unable to copy binary"
 

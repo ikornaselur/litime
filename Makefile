@@ -7,7 +7,7 @@ docker_build:
 	docker build -t litime-builder -f builder/Dockerfile builder
 
 build: docker_build
-	docker run -it \
+	docker run --rm -it \
 		-v `pwd`:/rust/build/litime \
 		-v `pwd`/artifacts:/output \
 		-e MINIFY="true" \
