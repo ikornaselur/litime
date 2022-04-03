@@ -17,6 +17,7 @@ termsize = "0.1.6"
 
 [profile.release]
 lto = true
+strip = true
 
 [dev-dependencies]
 pretty_assertions = "1.0.0"
