@@ -1,0 +1,74 @@
+on:
+  release:
+    types: [published]
+
+name: Build artefacts
+
+jobs:
+  armv7-unknown-linux-gnueabihf:
+    name: Linux ARMv7
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: armv7-unknown-linux-gnueabihf
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --target armv7-unknown-linux-gnueabihf --release
+      - run: mv target/armv7-unknown-linux-gnueabihf/release/litime target/armv7-unknown-linux-gnueabihf/release/litime-armv7-unknown-linux-gnueabihf
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: target/armv7-unknown-linux-gnueabihf/release/litime-armv7-unknown-linux-gnueabihf
+  x86_64-unknown-linux-gnu:
+    name: Linux 64-bit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --target x86_64-unknown-linux-gnu --release
+      - run: mv target/x86_64-unknown-linux-gnu/release/litime target/x86_64-unknown-linux-gnu/release/litime-x86_64-unknown-linux-gnu
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: target/x86_64-unknown-linux-gnu/release/litime-x86_64-unknown-linux-gnu
+  x86_64-apple-darwin:
+    name: macOS 64-bit
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --target x86_64-apple-darwin --release
+      - run: mv target/x86_64-apple-darwin/release/litime target/x86_64-apple-darwin/release/litime-x86_64-apple-darwin
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: target/x86_64-apple-darwin/release/litime-x86_64-apple-darwin
+  x86_64-pc-windows-msvc:
+    name: Windows 64-bit
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --target x86_64-pc-windows-msvc --release
+      - run: Rename-Item target\x86_64-pc-windows-msvc\release\litime.exe litime-x86_64-pc-windows-msvc.exe
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: target/x86_64-pc-windows-msvc/release/litime-x86_64-pc-windows-msvc.exe
