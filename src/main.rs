@@ -1,5 +1,5 @@
-use chrono::prelude::*;
 use clap::Parser;
+use time::{format_description, OffsetDateTime, Time};
 
 use crate::minute::get_minute;
 
@@ -68,11 +68,11 @@ fn main() {
     let args = Args::parse();
 
     let timestamp = args.time.unwrap_or_else(|| {
-        let local: DateTime<Local> = Local::now();
+        let now_local = OffsetDateTime::now_local().unwrap();
         format!(
             "{:0width$}:{:0width$}",
-            local.hour(),
-            local.minute(),
+            now_local.hour(),
+            now_local.minute(),
             width = 2
         )
     });
@@ -97,7 +97,8 @@ fn main() {
 }
 
 fn is_timestamp(val: &str) -> Result<(), String> {
-    match NaiveTime::parse_from_str(val, "%H:%M") {
+    let format = format_description::parse("[hour]:[minute]").unwrap();
+    match Time::parse(val, &format) {
         Ok(_) => Ok(()),
         _ => Err(String::from(
             "The value must be a valid 24-hour timestamp in the format HH:MM",
