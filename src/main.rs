@@ -1,3 +1,4 @@
+use anyhow::{bail, Result};
 use clap::Parser;
 use time::{format_description, OffsetDateTime, Time};
 
@@ -61,7 +62,7 @@ struct Args {
     max_width: usize,
 }
 
-fn main() {
+fn main() -> Result<()> {
     let args = Args::parse();
 
     let timestamp = args.time.unwrap_or_else(|| {
@@ -73,7 +74,7 @@ fn main() {
             width = 2
         )
     });
-    let minute = get_minute(&timestamp);
+    let minute = get_minute(&timestamp)?;
     let max_width = args.max_width;
 
     let width: usize = args.width.unwrap_or_else(|| {
@@ -91,22 +92,22 @@ fn main() {
             &args.author_colour
         )
     );
+
+    Ok(())
 }
 
-fn is_timestamp(val: &str) -> Result<(), String> {
-    let format = format_description::parse("[hour]:[minute]").unwrap();
+fn is_timestamp(val: &str) -> Result<()> {
+    let format = format_description::parse("[hour]:[minute]")?;
     match Time::parse(val, &format) {
         Ok(_) => Ok(()),
-        _ => Err(String::from(
-            "The value must be a valid 24-hour timestamp in the format HH:MM",
-        )),
+        _ => bail!("The value must be a valid 24-hour timestamp in the format HH:MM"),
     }
 }
 
-fn is_colour(val: &str) -> Result<(), String> {
+fn is_colour(val: &str) -> Result<()> {
     if COLOURS.iter().any(|&c| c == val) {
         Ok(())
     } else {
-        Err(format!("Unknown colour.\n{}", COLOUR_HELP))
+        bail!("Unknown colour.\n{}", COLOUR_HELP)
     }
 }
