@@ -39,6 +39,9 @@ pub fn get_minute<'a>(time: &str) -> &'a Minute {{
 pub use minutes::{{get_minute, Minute}};
 """
 
+def prep(section: str) -> str:
+    return html.unescape(section).replace('"', '\\"').replace("<br>", "\\n")
+
 for json_file in sorted(os.listdir(path_to_files)):
     with open(os.path.join(path_to_files, json_file), "r") as f:
         timestamp = json_file.split(".")[0].replace("_", ":")
@@ -47,17 +50,11 @@ for json_file in sorted(os.listdir(path_to_files)):
             try:
                 times[timestamp].append(
                     {
-                        "start": html.unescape(d["quote_first"])
-                        .replace('"', '\\"')
-                        .replace("<br>", "\\n"),
-                        "time": html.unescape(d["quote_time_case"])
-                        .replace('"', '\\"')
-                        .replace("<br>", "\\n"),
-                        "end": html.unescape(d["quote_last"])
-                        .replace('"', '\\"')
-                        .replace("<br>", "\\n"),
-                        "title": d["title"].replace('"', '\\"'),
-                        "author": d["author"].replace('"', '\\"'),
+                        "start": prep(d["quote_first"]),
+                        "time": prep(d["quote_time_case"]),
+                        "end": prep(d["quote_last"]),
+                        "title": prep(d["title"]),
+                        "author": prep(d["author"]),
                     }
                 )
             except KeyError as e:
