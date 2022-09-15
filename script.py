@@ -39,14 +39,29 @@ pub fn get_minute<'a>(time: &str) -> &'a Minute {{
 pub use minutes::{{get_minute, Minute}};
 """
 
+REPLACES = [
+    ('"', '\\"'),
+    ("<br>", "\\n"),
+    ("<br/>", "\\n"),
+    ("<br />", "\\n"),
+    ("\\n ", "\\n"),
+]
+
 def prep(section: str) -> str:
-    return html.unescape(section).replace('"', '\\"').replace("<br>", "\\n")
+    value = html.unescape(section)
+    for from_str, to_str in REPLACES:
+        value = value.replace(from_str, to_str)
+
+    return value
 
 for json_file in sorted(os.listdir(path_to_files)):
     with open(os.path.join(path_to_files, json_file), "r") as f:
         timestamp = json_file.split(".")[0].replace("_", ":")
         times[timestamp] = []
         for d in json.load(f):
+            if "|" in d["quote_last"]:
+                print(f"{timestamp} has malformed quote last. skipping")
+                continue
             try:
                 times[timestamp].append(
                     {
@@ -85,11 +100,11 @@ for timestamp, quotes in times.items():
         var_names.append(f"&{var_name}")
         minutes.append(
             f"static {var_name}: Minute = Minute {{"
-            f"title: \"{quote['title']}\","
-            f"author: \"{quote['author']}\","
-            f"start: \"{quote['start']}\","
-            f"time: \"{quote['time']}\","
-            f"end: \"{quote['end']}\","
+            f"title: \"{quote['title']}\", "
+            f"author: \"{quote['author']}\", "
+            f"start: \"{quote['start']}\", "
+            f"time: \"{quote['time']}\", "
+            f"end: \"{quote['end']}\""
             "};",
         )
     timestamps = [timestamp]
