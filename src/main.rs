@@ -1,10 +1,7 @@
 use clap::Parser;
 use time::{format_description, OffsetDateTime, Time};
 
-use crate::minute::get_minute;
-
-mod formatter;
-mod minute;
+use litime::minute::get_minute;
 
 static COLOURS: &[&str; 16] = &[
     "bright-black",
