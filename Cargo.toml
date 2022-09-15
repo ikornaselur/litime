@@ -1,7 +1,7 @@
 [package]
 name = "litime"
 version = "0.8.2"
-authors = ["Axel <dev@absalon.is>"]
+authors = ["Axel <litime@absalon.dev>"]
 description = "A command line tool to display the current time ish with a literature quote"
 repository = "https://github.com/ikornaselur/litime"
 license = "CC-BY-NC-SA-2.5"
