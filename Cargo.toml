@@ -6,12 +6,12 @@ description = "A command line tool to display the current time ish with a litera
 repository = "https://github.com/ikornaselur/litime"
 license = "CC-BY-NC-SA-2.5"
 readme = "README.md"
-edition = "2018"
+edition = "2021"
 
 [dependencies]
-textwrap = "0.14.2"
+textwrap = "0.15.0"
 rand = "0.8.4"
-clap = { version = "3.0.14", features = ["derive"] }
+clap = { version = "3.2.21", features = ["derive"] }
 termsize = "0.1.6"
 time = { version = "0.3.9", features = ["local-offset", "parsing"] }
 
