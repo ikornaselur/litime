@@ -42,16 +42,28 @@ pub use minutes::{{get_minute, Minute}};
 for json_file in sorted(os.listdir(path_to_files)):
     with open(os.path.join(path_to_files, json_file), "r") as f:
         timestamp = json_file.split(".")[0].replace("_", ":")
-        times[timestamp] = [
-            {
-                "start": html.unescape(d["quote_first"]).replace('"', '\\"'),
-                "time": html.unescape(d["quote_time_case"]).replace('"', '\\"'),
-                "end": html.unescape(d["quote_last"]).replace('"', '\\"'),
-                "title": d["title"].replace('"', '\\"'),
-                "author": d["author"].replace('"', '\\"'),
-            }
-            for d in json.load(f)
-        ]
+        times[timestamp] = []
+        for d in json.load(f):
+            try:
+                times[timestamp].append(
+                    {
+                        "start": html.unescape(d["quote_first"])
+                        .replace('"', '\\"')
+                        .replace("<br>", "\\n"),
+                        "time": html.unescape(d["quote_time_case"])
+                        .replace('"', '\\"')
+                        .replace("<br>", "\\n"),
+                        "end": html.unescape(d["quote_last"])
+                        .replace('"', '\\"')
+                        .replace("<br>", "\\n"),
+                        "title": d["title"].replace('"', '\\"'),
+                        "author": d["author"].replace('"', '\\"'),
+                    }
+                )
+            except KeyError as e:
+                print(f"{timestamp} missing key: {e}")
+                print(d)
+
 
 minutes = []
 matches = []
