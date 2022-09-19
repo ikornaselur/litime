@@ -1,6 +1,6 @@
 [package]
 name = "litime"
-version = "0.8.2"
+version = "0.8.3"
 authors = ["Axel <litime@absalon.dev>"]
 description = "A command line tool to display the current time ish with a literature quote"
 repository = "https://github.com/ikornaselur/litime"
