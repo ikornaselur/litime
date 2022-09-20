@@ -15,7 +15,7 @@ Binaries are built with Github Actions and attached to releases for:
 * Linux x86_64
 * Linux armv7
 
-You can also install directrly with `cargo install litime` if you use cargo
+You can also install directly with `cargo install litime` if you use cargo
 
 ## Attributions
 ### Source of quotes
