@@ -4,7 +4,7 @@ A simple tool to display the current time with a quote from literature.
 
 ## Usage
 
-_Running litime directly_
+_Running litime directly, which can be done on shell startup_
 ![quote](.example-quote.png)
 _Options_
 ![help](.example-help.png)
