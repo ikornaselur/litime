@@ -57,7 +57,7 @@ struct Args {
     #[clap(short, long)]
     width: Option<usize>,
 
-    /// The max width of the quote when now set by the WIDTH option
+    /// The max width of the quote when not set by the WIDTH option
     #[clap(long, default_value_t = MAX_WIDTH)]
     max_width: usize,
 }
