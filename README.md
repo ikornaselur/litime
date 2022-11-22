@@ -2,10 +2,12 @@
 
 A simple tool to display the current time with a quote from literature.
 
-## Example
+## Usage
 
-_Running litime on shell startup_
-![example](example.png)
+_Running litime directly_
+![quote](.example-quote.png)
+_Options_
+![help](.example-help.png)
 
 ## Install
 
