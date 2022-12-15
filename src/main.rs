@@ -36,19 +36,19 @@ static MARGIN: usize = 5; // Margin on the right of the comment, only used when 
 #[clap(version, about)]
 struct Args {
     /// A timestamp to get a quote for, for example 07:16
-    #[clap(validator = is_timestamp)]
+    #[clap(value_parser = is_timestamp)]
     time: Option<String>,
 
     /// Colour of the quote, excluding the time
-    #[clap(long, short, validator = is_colour, default_value_t = DEFAULT_MAIN.to_string())]
+    #[clap(long, short, value_parser = is_colour, default_value_t = DEFAULT_MAIN.to_string())]
     main_colour: String,
 
     /// Colour of the time part of the quote
-    #[clap(long, short, validator = is_colour, default_value_t = DEFAULT_TIME.to_string())]
+    #[clap(long, short, value_parser = is_colour, default_value_t = DEFAULT_TIME.to_string())]
     time_colour: String,
 
     /// Colour of the author and book below the quote
-    #[clap(long, short, validator = is_colour, default_value_t = DEFAULT_AUTHOR.to_string())]
+    #[clap(long, short, value_parser = is_colour, default_value_t = DEFAULT_AUTHOR.to_string())]
     author_colour: String,
 
     /// Whether only to show SFW quotes
@@ -100,17 +100,17 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn is_timestamp(val: &str) -> Result<()> {
+fn is_timestamp(val: &str) -> Result<String> {
     let format = format_description::parse("[hour]:[minute]")?;
     match Time::parse(val, &format) {
-        Ok(_) => Ok(()),
+        Ok(_) => Ok(val.to_string()),
         _ => bail!("The value must be a valid 24-hour timestamp in the format HH:MM"),
     }
 }
 
-fn is_colour(val: &str) -> Result<()> {
+fn is_colour(val: &str) -> Result<String> {
     if COLOURS.iter().any(|&c| c == val) {
-        Ok(())
+        Ok(val.to_string())
     } else {
         bail!("Unknown colour.\n{}", COLOUR_HELP)
     }
