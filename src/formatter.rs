@@ -40,8 +40,8 @@ impl Minute<'_> {
             .initial_indent(FOOTER_INDENT)
             .subsequent_indent(FOOTER_INDENT);
 
-        let quote = fill(quote.as_str(), &quote_options);
-        let footer = fill(footer.as_str(), &footer_options);
+        let quote = fill(quote.as_str(), quote_options);
+        let footer = fill(footer.as_str(), footer_options);
 
         format!("\n{}\n\n{}\n", quote, footer)
             .replace('\x00', get_colour("reset"))
