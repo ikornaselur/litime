@@ -40,16 +40,20 @@ struct Args {
     time: Option<String>,
 
     /// Colour of the quote, excluding the time
-    #[clap(long, validator = is_colour, default_value_t = DEFAULT_MAIN.to_string())]
+    #[clap(long, short, validator = is_colour, default_value_t = DEFAULT_MAIN.to_string())]
     main_colour: String,
 
     /// Colour of the time part of the quote
-    #[clap(long, validator = is_colour, default_value_t = DEFAULT_TIME.to_string())]
+    #[clap(long, short, validator = is_colour, default_value_t = DEFAULT_TIME.to_string())]
     time_colour: String,
 
     /// Colour of the author and book below the quote
-    #[clap(long, validator = is_colour, default_value_t = DEFAULT_AUTHOR.to_string())]
+    #[clap(long, short, validator = is_colour, default_value_t = DEFAULT_AUTHOR.to_string())]
     author_colour: String,
+
+    /// Whether only to show SFW quotes
+    #[clap(long, short, action)]
+    sfw: bool,
 
     /// The number of columns for the quote, before wrapping into another line. If not set, then
     /// litime will try to detect the width of the terminal window, up to MAX_WIDTH (default 120
@@ -74,7 +78,7 @@ fn main() -> Result<()> {
             width = 2
         )
     });
-    let minute = get_minute(&timestamp)?;
+    let minute = get_minute(&timestamp, args.sfw)?;
     let max_width = args.max_width;
 
     let width: usize = args.width.unwrap_or_else(|| {
