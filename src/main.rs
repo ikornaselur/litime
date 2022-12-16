@@ -33,36 +33,39 @@ static DEFAULT_WIDTH: usize = 80; // If we fail to get terminal width
 static MARGIN: usize = 5; // Margin on the right of the comment, only used when automatically detecting the terminal width
 
 #[derive(Parser, Debug)]
-#[clap(version, about)]
+#[command(version, about)]
 struct Args {
-    /// A timestamp to get a quote for, for example 07:16
-    #[clap(value_parser = is_timestamp)]
+    /// A timestamp to get a quote for
+    ///
+    /// The timestamp should be a 24-hour timestamp in the form of HH:MM, such as 07:13 or 21:20.
+    /// If the timestamp is not given, the current time of the system is used.
+    #[arg(value_parser = is_timestamp)]
     time: Option<String>,
 
     /// Colour of the quote, excluding the time
-    #[clap(long, short, value_parser = is_colour, default_value_t = DEFAULT_MAIN.to_string())]
+    #[arg(long, short, value_parser = is_colour, default_value_t = DEFAULT_MAIN.to_string())]
     main_colour: String,
 
     /// Colour of the time part of the quote
-    #[clap(long, short, value_parser = is_colour, default_value_t = DEFAULT_TIME.to_string())]
+    #[arg(long, short, value_parser = is_colour, default_value_t = DEFAULT_TIME.to_string())]
     time_colour: String,
 
     /// Colour of the author and book below the quote
-    #[clap(long, short, value_parser = is_colour, default_value_t = DEFAULT_AUTHOR.to_string())]
+    #[arg(long, short, value_parser = is_colour, default_value_t = DEFAULT_AUTHOR.to_string())]
     author_colour: String,
 
     /// Whether only to show SFW quotes
-    #[clap(long, short, action)]
+    #[arg(long, short)]
     sfw: bool,
 
-    /// The number of columns for the quote, before wrapping into another line. If not set, then
-    /// litime will try to detect the width of the terminal window, up to MAX_WIDTH (default 120
-    /// columns)
-    #[clap(short, long)]
+    /// The number of columns for the quote, before wrapping into another line.
+    ///
+    /// If not set, then litime will try to detect the width of the terminal window, up to MAX_WIDTH (default 120 columns)
+    #[arg(short, long)]
     width: Option<usize>,
 
     /// The max width of the quote when not set by the WIDTH option
-    #[clap(long, default_value_t = MAX_WIDTH)]
+    #[arg(long, default_value_t = MAX_WIDTH)]
     max_width: usize,
 }
 
