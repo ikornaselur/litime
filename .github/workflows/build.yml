@@ -41,7 +41,7 @@ jobs:
         with:
           files: target/x86_64-unknown-linux-gnu/release/litime-x86_64-unknown-linux-gnu
   x86_64-apple-darwin:
-    name: macOS 64-bit
+    name: macOS 64-bit x86
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -56,6 +56,24 @@ jobs:
       - uses: softprops/action-gh-release@v1
         with:
           files: target/x86_64-apple-darwin/release/litime-x86_64-apple-darwin
+  aarch64-apple-darwin:
+    name: macOS 64-bit aarch64
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: aarch64-apple-darwin
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --target aarch64-apple-darwin --release
+      - run: mv target/aarch64-apple-darwin/release/litime target/aarch64-apple-darwin/release/litime-aarch64-apple-darwin
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: target/aarch64-apple-darwin/release/litime-aarch64-apple-darwin
   x86_64-pc-windows-msvc:
     name: Windows 64-bit
     runs-on: windows-latest

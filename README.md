@@ -14,6 +14,7 @@ _Options_
 Binaries are built with Github Actions and attached to releases for:
 * Windows x86_64
 * macOS x86_64
+* macOS aarch64 (M1/M2)
 * Linux x86_64
 * Linux armv7
 
