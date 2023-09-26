@@ -1,0 +1,28 @@
+name: Release please
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: tibdex/github-app-token@v2
+        id: get-token
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - uses: google-github-actions/release-please-action@v3
+        with:
+          release-type: rust
+          package-name: litime
+          token: ${{ steps.get-token.outputs.token }}
+          changelog-types: '[{"type":"feat","section":"Features"},{"type":"fix","section":"Bug Fixes"},{"type":"chore","section":"Miscellaneous"},{"type":"deps","section":"Dependencies"},{"type":"docs","section":"Documentation","hidden":true}]'
