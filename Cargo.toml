@@ -9,12 +9,12 @@ readme = "README.md"
 edition = "2021"
 
 [dependencies]
-textwrap = "0.16.0"
-rand = "0.8.5"
-clap = { version = "4.0.29", features = ["derive"] }
-termsize = "0.1.6"
-time = { version = "0.3.17", features = ["local-offset", "parsing"] }
-anyhow = "1.0.66"
+textwrap = "0.16"
+rand = "0.8"
+clap = { version = "4", features = ["derive"] }
+termsize = "0.1"
+time = { version = "0.3", features = ["local-offset", "parsing"] }
+anyhow = "1"
 
 [profile.release]
 lto = true
