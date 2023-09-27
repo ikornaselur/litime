@@ -7,6 +7,11 @@ repository = "https://github.com/ikornaselur/litime"
 license = "CC-BY-NC-SA-2.5"
 readme = "README.md"
 edition = "2021"
+include = [
+  "**/*.rs",
+  "Cargo.toml",
+  "external/literature-clock/docs/times/*.json",
+]
 
 [dependencies]
 textwrap = "0.16"
