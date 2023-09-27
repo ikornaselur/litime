@@ -61,6 +61,14 @@ fn get_next_timestamp(ts: String) -> String {
     format!("{:02}_{:02}", hours, minutes)
 }
 
+fn replace(s: &str) -> String {
+    s.replace('"', "\\\"")
+        .replace("<br>", "\\n")
+        .replace("<br/>", "\\n")
+        .replace("<br />", "\\n")
+        .replace("\\n ", "\\n")
+}
+
 fn main() {
     let out_dir = env::var_os("OUT_DIR").unwrap();
     let quotes_dest_path = Path::new(&out_dir).join("quotes.rs");
@@ -82,11 +90,11 @@ fn main() {
                 "static QUOTE_{}_{}: Minute = Minute{{title: \"{}\", author: \"{}\", start: \"{}\", time: \"{}\", end: \"{}\"}};\n",
                 key,
                 index,
-                quote.title.replace('"', "\\\""),
-                quote.author.replace('"', "\\\""),
-                quote.quote_first.replace('"', "\\\""),
-                quote.quote_time_case.replace('"', "\\\""),
-                quote.quote_last.replace('"', "\\\"")
+                replace(&quote.title),
+                replace(&quote.author),
+                replace(&quote.quote_first),
+                replace(&quote.quote_time_case),
+                replace(&quote.quote_last),
             ));
         }
     }
