@@ -14,13 +14,14 @@ include = [
 ]
 
 [dependencies]
-textwrap = "0.16"
+textwrap = { version = "0.16", default-features = false, features = ["smawk"] }
 clap = { version = "4", features = ["derive"] }
 termsize = "0.1"
-time = { version = "0.3", features = ["local-offset", "parsing"] }
+time = { version = "0.3", default-features = false, features = ["local-offset", "parsing"] }
 anyhow = "1"
 
 [profile.release]
+codegen-units = 1
 lto = true
 strip = true
 
