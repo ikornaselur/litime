@@ -39,6 +39,28 @@ fn get_quotes() -> HashMap<String, Vec<Quote>> {
     map
 }
 
+/// Get the next timestamp
+///
+/// The next timestamp is one minute later, for example:
+///
+///     get_next_timestamp("00_00") == "00_01"
+///     get_next_timestamp("00_59") == "01_00"
+///     get_next_timestamp("23_59") == "00_00"
+fn get_next_timestamp(ts: String) -> String {
+    let mut ts = ts.split('_');
+    let mut hours = ts.next().unwrap().parse::<u8>().unwrap();
+    let mut minutes = ts.next().unwrap().parse::<u8>().unwrap();
+    minutes += 1;
+    if minutes == 60 {
+        hours += 1;
+        minutes = 0;
+    }
+    if hours == 24 {
+        hours = 0;
+    }
+    format!("{:02}_{:02}", hours, minutes)
+}
+
 fn main() {
     let out_dir = env::var_os("OUT_DIR").unwrap();
     let quotes_dest_path = Path::new(&out_dir).join("quotes.rs");
@@ -81,12 +103,13 @@ fn main() {
     //
     // Only include the quotes that are sfw if the sfw flag is true, when the flag is false, it can
     // include all the quotes
-    let mut options_string = String::new();
-    options_string.push_str("match (time, sfw) {\n");
+    let mut pre_processed_matches: Vec<(String, String, String)> = Vec::new();
 
-    println!("cargo:warning=Need to fill gaps, see the 'check if we need to fill future gaps' in script.py");
+    // Convert the quotes hashmap to a sorted list of (key, value) tuples
+    let mut values = quotes.iter().collect::<Vec<_>>();
+    values.sort_by(|a, b| a.0.cmp(b.0));
 
-    for (key, value) in quotes.iter() {
+    for (key, value) in values {
         let mut sfw_quotes: Vec<String> = Vec::new();
         let mut all_quotes: Vec<String> = Vec::new();
 
@@ -97,30 +120,80 @@ fn main() {
             }
         }
 
-        if sfw_quotes.is_empty() {
-            println!(
-                "cargo:warning=No SFW quotes for {}, need to point at previous timestamp",
-                key
-            );
+        // Check if we need to fill future gaps
+        let mut timestamps: Vec<String> = vec![key.to_string()];
+        let mut timestamp = get_next_timestamp(key.clone());
+        while !quotes.contains_key(&timestamp) {
+            timestamps.push(timestamp.clone());
+            timestamp = get_next_timestamp(timestamp);
         }
+        let joined_timestamps = timestamps.join("\" | \"");
+
         if sfw_quotes.len() == all_quotes.len() {
-            options_string.push_str(&format!(
-                "(\"{}\", _) => vec![{}],\n",
-                key.replace('_', ":"),
-                all_quotes.join(", ")
+            // We only have SFW quotes, so just point timestamps at all quotes
+            pre_processed_matches.push((joined_timestamps, "_".to_string(), all_quotes.join(", ")));
+        } else if sfw_quotes.is_empty() {
+            // We have no SFW quotes. Add the quotes for NSFW and then add the
+            // timestamp to previous step for SFW Pop off the last value added
+            let (mut previous_joined_timestamps, sfw, varnames) =
+                pre_processed_matches.pop().unwrap();
+            if sfw == "true" {
+                // We can just add it
+                previous_joined_timestamps += &("\" | \"".to_string() + &joined_timestamps);
+                // push it back on
+                pre_processed_matches.push((previous_joined_timestamps, sfw, varnames));
+            } else if sfw == "_" {
+                // We have to split it
+                // Push on nsfw to be the normal
+                pre_processed_matches.push((
+                    previous_joined_timestamps.clone(),
+                    "false".to_string(),
+                    varnames.clone(),
+                ));
+                // Push on new sfw to be normal + new
+                previous_joined_timestamps += &("\" | \"".to_string() + &joined_timestamps);
+                pre_processed_matches.push((
+                    previous_joined_timestamps,
+                    "true".to_string(),
+                    varnames,
+                ));
+            } else {
+                panic!("Last preprocessed was nsfw?");
+            }
+
+            // And then deal with nsfw as normal
+            pre_processed_matches.push((
+                joined_timestamps,
+                "false".to_string(),
+                all_quotes.join(", "),
             ));
         } else {
-            options_string.push_str(&format!(
-                "(\"{}\", false) => vec![{}],\n",
-                key.replace('_', ":"),
-                all_quotes.join(", ")
+            // It's a mix
+            // Point at all for nsfw
+            pre_processed_matches.push((
+                joined_timestamps.clone(),
+                "false".to_string(),
+                all_quotes.join(", "),
             ));
-            options_string.push_str(&format!(
-                "(\"{}\", true) => vec![{}],\n",
-                key.replace('_', ":"),
-                sfw_quotes.join(", ")
+            // Point at sfw for sfw
+            pre_processed_matches.push((
+                joined_timestamps,
+                "true".to_string(),
+                sfw_quotes.join(", "),
             ));
         }
+    }
+    // Join all into options
+    let mut options_string = String::new();
+    options_string.push_str("match (time, sfw) {\n");
+
+    for (time, sfw, quotes) in pre_processed_matches {
+        options_string.push_str(&format!(
+            "(\"{}\", {}) => vec![{}],\n",
+            time.replace('_', ":"),
+            sfw,
+            quotes,
+        ));
     }
     options_string.push_str("(_, _) => bail!(\"Couldn't match timestamp!\"),\n");
     options_string.push('}');
