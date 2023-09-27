@@ -15,7 +15,6 @@ include = [
 
 [dependencies]
 textwrap = "0.16"
-rand = "0.8"
 clap = { version = "4", features = ["derive"] }
 termsize = "0.1"
 time = { version = "0.3", features = ["local-offset", "parsing"] }
