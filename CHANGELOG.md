@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/ikornaselur/litime/compare/v1.3.0...v2.0.0) (2023-09-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* Add support for using styles and colour as formatting ([#41](https://github.com/ikornaselur/litime/issues/41))
+
+### Features
+
+* Add support for using styles and colour as formatting ([#41](https://github.com/ikornaselur/litime/issues/41)) ([baa4fb5](https://github.com/ikornaselur/litime/commit/baa4fb5e9a4c398a3c2ccc152910e5e8c661a0a5))
+
 ## [1.3.0](https://github.com/ikornaselur/litime/compare/v1.2.0...v1.3.0) (2023-09-27)
 
 
