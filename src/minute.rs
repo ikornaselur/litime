@@ -1,5 +1,4 @@
-use anyhow::{bail, Context, Result};
-use rand::seq::SliceRandom;
+use anyhow::{bail, Result};
 
 pub struct Minute<'a> {
     pub title: &'a str,
@@ -14,9 +13,14 @@ include!(concat!(env!("OUT_DIR"), "/quotes.rs"));
 pub fn get_minute<'a>(time: &str, sfw: bool) -> Result<&'a Minute> {
     let options = include!(concat!(env!("OUT_DIR"), "/options.rs"));
 
-    let quote = options
-        .choose(&mut rand::thread_rng())
-        .context("Unable to choose a random quote")?;
+    match options.len() {
+        1 => Ok(options[0]),
+        l => {
+            // Use the current millisecond fraction as a pseudo random picker
+            let now = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH)?;
+            let millis = now.subsec_millis() as usize;
 
-    Ok(quote)
+            Ok(options[millis % l])
+        }
+    }
 }
