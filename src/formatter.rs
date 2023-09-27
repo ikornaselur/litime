@@ -8,6 +8,8 @@ static INITIAL_INDENT: &str = "  \" ";
 static SUBSEQUENT_INDENT: &str = "    ";
 static FOOTER_INDENT: &str = "        ";
 
+pub static FORMATTING_HELP: &str = "Formatting in the form of '<format> <colour>' or just '<colour>', such as 'bold red' or 'blue'.\nAvailable styles are: italic, bold, underline\nAvailable colours are: black, blue, cyan, green, magenta, red, white and yellow.\nEach colour can be prefixed with 'bright-'.";
+
 #[derive(Debug, Clone)]
 pub enum Colour {
     Black,
@@ -50,7 +52,7 @@ impl TryFrom<&str> for Colour {
             "bright-magenta" => Ok(Self::BrightMagenta),
             "bright-cyan" => Ok(Self::BrightCyan),
             "bright-white" => Ok(Self::BrightWhite),
-            _ => bail!("Unknown colour: {}", value),
+            _ => bail!("Unknown colour: {}\n\n{}", value, FORMATTING_HELP),
         }
     }
 }
@@ -78,7 +80,7 @@ impl Colour {
         }
     }
 
-    fn into_name(&self) -> &str {
+    fn name(&self) -> &str {
         match self {
             Colour::Black => "black",
             Colour::Red => "red",
@@ -118,7 +120,7 @@ impl TryFrom<&str> for Style {
             "bold" => Ok(Self::Bold),
             "italic" => Ok(Self::Italic),
             "underline" => Ok(Self::Underline),
-            _ => bail!("Unknown formatting: {}", value),
+            _ => bail!("Unknown style: {}\n\n{}", value, FORMATTING_HELP),
         }
     }
 }
@@ -133,7 +135,7 @@ impl Style {
         }
     }
 
-    fn into_name(&self) -> &str {
+    fn name(&self) -> &str {
         match self {
             Style::Plain => "plain",
             Style::Bold => "bold",
@@ -162,8 +164,8 @@ impl Formatting {
 impl fmt::Display for Formatting {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self.style {
-            Style::Plain => write!(f, "{}", self.colour.into_name()),
-            _ => write!(f, "{} {}", self.style.into_name(), self.colour.into_name()),
+            Style::Plain => write!(f, "{}", self.colour.name()),
+            _ => write!(f, "{} {}", self.style.name(), self.colour.name()),
         }
     }
 }
@@ -199,7 +201,7 @@ impl Minute<'_> {
         let footer = fill(footer.as_str(), footer_options);
 
         format!("\n{}\n\n{}\n", quote, footer)
-            .replace('\x00', Style::Plain.as_escape_str())
+            .replace('\x00', &Formatting::from(Colour::Reset).as_escape_string())
             .replace('\x01', &author.as_escape_string())
             .replace('\x02', &main.as_escape_string())
             .replace('\x03', &time.as_escape_string())

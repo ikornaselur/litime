@@ -2,10 +2,9 @@ use anyhow::{bail, Result};
 use clap::Parser;
 use time::{format_description, OffsetDateTime, Time};
 
-use litime::formatter::{Colour, Formatting, Style};
+use litime::formatter::{Colour, Formatting, Style, FORMATTING_HELP};
 use litime::minute::get_minute;
 
-static FORMATTING_HELP: &str = "Formatting in the form of '<format> <colour>' or just '<colour>', such as 'bold red' or 'blue'. Available colours are black, blue, cyan, green, magenta, red, white and yellow.\nEach colour can be prefixed with 'bright-'.";
 static MIN_WIDTH: usize = 20;
 static MAX_WIDTH: usize = 120;
 static DEFAULT_WIDTH: usize = 80; // If we fail to get terminal width
@@ -120,6 +119,6 @@ fn is_valid_format(val: &str) -> Result<Formatting> {
             colour: Colour::try_from(parts[1])?,
         })
     } else {
-        bail!("Invalid format.\n{}", FORMATTING_HELP)
+        bail!("Invalid format.\n\n{}", FORMATTING_HELP)
     }
 }
