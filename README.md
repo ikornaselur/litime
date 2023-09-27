@@ -24,4 +24,3 @@ You can also install directly with `cargo install litime` if you use cargo
 ### Source of quotes
 Built on top of the data from
 [JohannesNE/literature-clock](https://github.com/JohannesNE/literature-clock).
-See `script.py` for quick and dirty script to update.
