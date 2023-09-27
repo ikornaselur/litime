@@ -2,31 +2,10 @@ use anyhow::{bail, Result};
 use clap::Parser;
 use time::{format_description, OffsetDateTime, Time};
 
+use litime::formatter::{Colour, Formatting, Style};
 use litime::minute::get_minute;
 
-static COLOURS: &[&str; 16] = &[
-    "bright-black",
-    "bright-blue",
-    "bright-cyan",
-    "bright-green",
-    "bright-magenta",
-    "bright-red",
-    "bright-white",
-    "bright-yellow",
-    "black",
-    "blue",
-    "cyan",
-    "green",
-    "magenta",
-    "red",
-    "white",
-    "yellow",
-];
-
-static COLOUR_HELP: &str = "Available colours are black, blue, cyan, green, magenta, red, white and yellow.\nEach colour can be prefixed with 'bright-'.";
-static DEFAULT_MAIN: &str = "bright-black";
-static DEFAULT_TIME: &str = "red";
-static DEFAULT_AUTHOR: &str = "white";
+static FORMATTING_HELP: &str = "Formatting in the form of '<format> <colour>' or just '<colour>', such as 'bold red' or 'blue'. Available colours are black, blue, cyan, green, magenta, red, white and yellow.\nEach colour can be prefixed with 'bright-'.";
 static MIN_WIDTH: usize = 20;
 static MAX_WIDTH: usize = 120;
 static DEFAULT_WIDTH: usize = 80; // If we fail to get terminal width
@@ -42,17 +21,26 @@ struct Args {
     #[arg(value_parser = is_timestamp)]
     time: Option<String>,
 
-    /// Colour of the quote, excluding the time
-    #[arg(long, short, value_parser = is_colour, default_value_t = DEFAULT_MAIN.to_string())]
-    main_colour: String,
+    /// Formatting of the quote, excluding the time
+    #[arg(long, short, value_parser = is_valid_format, default_value_t = Formatting {
+        style: Style::Plain,
+        colour: Colour::White
+    })]
+    main_formatting: Formatting,
 
-    /// Colour of the time part of the quote
-    #[arg(long, short, value_parser = is_colour, default_value_t = DEFAULT_TIME.to_string())]
-    time_colour: String,
+    /// Formatting of the time part of the quote
+    #[arg(long, short, value_parser = is_valid_format, default_value_t = Formatting {
+        style: Style::Bold,
+        colour: Colour::Red
+    })]
+    time_formatting: Formatting,
 
-    /// Colour of the author and book below the quote
-    #[arg(long, short, value_parser = is_colour, default_value_t = DEFAULT_AUTHOR.to_string())]
-    author_colour: String,
+    /// Formatting of the author and book below the quote
+    #[arg(long, short, value_parser = is_valid_format, default_value_t = Formatting {
+        style: Style::Plain,
+        colour: Colour::White
+    })]
+    author_formatting: Formatting,
 
     /// Whether only to show SFW quotes
     #[arg(long, short)]
@@ -94,9 +82,9 @@ fn main() -> Result<()> {
         "{}",
         minute.formatted(
             std::cmp::max(width, MIN_WIDTH),
-            &args.main_colour,
-            &args.time_colour,
-            &args.author_colour
+            &args.main_formatting,
+            &args.time_formatting,
+            &args.author_formatting
         )
     );
 
@@ -111,10 +99,27 @@ fn is_timestamp(val: &str) -> Result<String> {
     }
 }
 
-fn is_colour(val: &str) -> Result<String> {
-    if COLOURS.iter().any(|&c| c == val) {
-        Ok(val.to_string())
+/// Check if value is a valid format
+///
+/// A valid format is either a colour or a format and a colour separated by a space.
+///
+/// # Examples
+/// ```
+/// assert!(is_format("red").is_ok());
+/// assert!(is_format("bold red").is_ok());
+/// assert!(is_format("bold").is_err());
+/// assert!(is_format("red bold").is_err());
+/// ```
+fn is_valid_format(val: &str) -> Result<Formatting> {
+    let parts: Vec<&str> = val.split(' ').collect();
+    if parts.len() == 1 {
+        Ok(Colour::try_from(parts[0])?.into())
+    } else if parts.len() == 2 {
+        Ok(Formatting {
+            style: Style::try_from(parts[0])?,
+            colour: Colour::try_from(parts[1])?,
+        })
     } else {
-        bail!("Unknown colour.\n{}", COLOUR_HELP)
+        bail!("Invalid format.\n{}", FORMATTING_HELP)
     }
 }
