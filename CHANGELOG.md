@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/ikornaselur/litime/compare/v1.2.0...v1.3.0) (2023-09-27)
+
+
+### Features
+
+* Build the minutes directly with a build.rs script ([#39](https://github.com/ikornaselur/litime/issues/39)) ([246244f](https://github.com/ikornaselur/litime/commit/246244f6b19fa9415bea5a16aa1bb379ec709b11))
+
 ## [1.2.0](https://github.com/ikornaselur/litime/compare/1.1.0...v1.2.0) (2023-09-26)
 
 
