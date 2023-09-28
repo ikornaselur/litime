@@ -44,14 +44,14 @@ struct Args {
 
     /// Formatting of the time part of the quote
     #[arg(long, short, value_parser = is_valid_format, default_value_t = Formatting {
-        style: Style::Bold,
+        style: Style::Intense,
         colour: Color::Red
     })]
     time_formatting: Formatting,
 
     /// Formatting of the author and book below the quote
     #[arg(long, short, value_parser = is_valid_format, default_value_t = Formatting {
-        style: Style::Plain,
+        style: Style::Intense,
         colour: Color::White
     })]
     author_formatting: Formatting,
