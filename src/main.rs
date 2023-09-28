@@ -13,7 +13,9 @@ static MARGIN: usize = 5; // Margin on the right of the comment, only used when 
 
 /// Hello
 #[derive(Parser, Debug)]
-#[command(version, about=r#"A command line tool to dispaly the current time-ish with a literature quote.
+#[command(
+    version,
+    about = r#"A command line tool to dispaly the current time-ish with a literature quote.
 
 Parts of the quote can be formatted with formatting strings, in the form of '<style> <colour>' or just '<colour>'
 Available colours are:
@@ -23,7 +25,8 @@ Available colours are:
 Available styles are:
 
     bold, dimmed, intense, italic, strikethrough and underline 
-"#)]
+"#
+)]
 struct Args {
     /// A timestamp to get a quote for
     ///
@@ -89,12 +92,15 @@ fn main() -> Result<()> {
             .unwrap_or(DEFAULT_WIDTH)
     });
 
-    minute.formatted(
-        std::cmp::max(width, MIN_WIDTH),
-        &args.main_formatting,
-        &args.time_formatting,
-        &args.author_formatting,
-    )?;
+    println!(
+        "{}",
+        minute.formatted(
+            std::cmp::max(width, MIN_WIDTH),
+            &args.main_formatting,
+            &args.time_formatting,
+            &args.author_formatting,
+        )?
+    );
 
     Ok(())
 }

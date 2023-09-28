@@ -1,7 +1,7 @@
 use anyhow::{bail, Result};
 use std::fmt;
 use std::io::Write;
-use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
+use termcolor::{BufferWriter, Color, ColorChoice, ColorSpec, WriteColor};
 use textwrap::{fill, Options};
 
 use crate::minute::Minute;
@@ -73,13 +73,11 @@ impl From<Color> for Formatting {
     }
 }
 
-impl Into<ColorSpec> for Formatting {
-    fn into(self) -> ColorSpec {
+impl From<Formatting> for ColorSpec {
+    fn from(formatting: Formatting) -> Self {
         let mut spec = ColorSpec::new();
-
-        spec.set_fg(Some(self.colour));
-
-        match self.style {
+        spec.set_fg(Some(formatting.colour));
+        match formatting.style {
             Style::Bold => spec.set_bold(true),
             Style::Dimmed => spec.set_dimmed(true),
             Style::Intense => spec.set_intense(true),
@@ -120,7 +118,7 @@ impl Minute<'_> {
         main: &Formatting,
         time: &Formatting,
         author: &Formatting,
-    ) -> Result<()> {
+    ) -> Result<String> {
         let quote = format!("{}\x00{}\x00{}", self.start, self.time, self.end);
         let footer = format!("{} – {}", self.author, self.title);
 
@@ -141,42 +139,43 @@ impl Minute<'_> {
         let time_spec: ColorSpec = time.clone().into();
         let author_spec: ColorSpec = author.clone().into();
 
-        let mut stdout = StandardStream::stdout(ColorChoice::Always);
+        let buffer_writer = BufferWriter::stdout(ColorChoice::Auto);
+        let mut buffer = buffer_writer.buffer();
 
         // Initial line
-        writeln!(&mut stdout)?;
+        writeln!(&mut buffer)?;
 
         // First part of main colour
-        stdout.set_color(&main_spec)?;
-        write!(&mut stdout, "{}", parts[0])?;
+        buffer.set_color(&main_spec)?;
+        write!(&mut buffer, "{}", parts[0])?;
 
         // The time itself
-        stdout.set_color(&time_spec)?;
-        write!(&mut stdout, "{}", parts[1])?;
+        buffer.set_color(&time_spec)?;
+        write!(&mut buffer, "{}", parts[1])?;
 
         // Rest of the main colour
-        stdout.set_color(&main_spec)?;
-        write!(&mut stdout, "{}", parts[2])?;
+        buffer.set_color(&main_spec)?;
+        write!(&mut buffer, "{}", parts[2])?;
 
         // Two lines between quote and author
-        writeln!(&mut stdout)?;
-        writeln!(&mut stdout)?;
+        writeln!(&mut buffer)?;
+        writeln!(&mut buffer)?;
 
         // Author
-        stdout.set_color(&author_spec)?;
-        write!(&mut stdout, "{}", footer)?;
+        buffer.set_color(&author_spec)?;
+        write!(&mut buffer, "{}", footer)?;
 
         // End with new line
-        writeln!(&mut stdout)?;
+        writeln!(&mut buffer)?;
 
-        Ok(())
+        Ok(String::from_utf8(buffer.into_inner())?)
     }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
-    use pretty_assertions::assert_eq;
+    //use pretty_assertions::assert_eq;
 
     #[test]
     fn wrapped_quote() {
@@ -188,37 +187,21 @@ mod test {
             title: "title",
         };
 
-        let formatted = minute.formatted(
-            20,
-            &Color::Black.into(),
-            &Color::Red.into(),
-            &Color::White.into(),
-        );
+        let formatted = minute
+            .formatted(
+                20,
+                &Color::Black.into(),
+                &Color::Red.into(),
+                &Color::White.into(),
+            )
+            .unwrap();
         let expected = [
-            format!(
-                "\n  \" {}black black",
-                Formatting::from(Color::Black)
-            ),
-            format!(
-                "    black {}red red",
-                Formatting::from(Color::Red)
-            ),
-            format!(
-                "    red red{} black",
-                Formatting::from(Color::Black)
-            ),
-            format!(
-                "    black black{}\n",
-                Formatting::from(Color::Reset)
-            ),
-            format!(
-                "        {}author –",
-                Formatting::from(Color::White)
-            ),
-            format!(
-                "        title{}\n",
-                Formatting::from(Color::Reset)
-            ),
+            "\n\u{1b}[0m\u{1b}[30m  \" black black".to_string(),
+            "    black \u{1b}[0m\u{1b}[31mred red".to_string(),
+            "    red red\u{1b}[0m\u{1b}[30m black".to_string(),
+            "    black black\n".to_string(),
+            "\u{1b}[0m\u{1b}[37m        author –".to_string(),
+            "        title\n".to_string(),
         ]
         .join("\n");
 
@@ -235,25 +218,18 @@ mod test {
             title: "title",
         };
 
-        let formatted = minute.formatted(
-            50,
-            &Colour::BrightBlack.into(),
-            &Colour::Red.into(),
-            &Colour::White.into(),
-        );
+        let formatted = minute
+            .formatted(
+                50,
+                &Color::Black.into(),
+                &Color::Red.into(),
+                &Color::White.into(),
+            )
+            .unwrap();
         let expected = [
-            format!(
-                "\n  \" {}foo {}bar{} baz{}\n",
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-                Formatting::from(Colour::Red).as_escape_string(),
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-                Formatting::from(Colour::Reset).as_escape_string(),
-            ),
-            format!(
-                "        {}author – title{}\n",
-                Formatting::from(Colour::White).as_escape_string(),
-                Formatting::from(Colour::Reset).as_escape_string(),
-            ),
+            "\n\u{1b}[0m\u{1b}[30m  \" foo \u{1b}[0m\u{1b}[31mbar\u{1b}[0m\u{1b}[30m baz"
+                .to_string(),
+            "\n\u{1b}[0m\u{1b}[37m        author – title\n".to_string(),
         ]
         .join("\n");
 
@@ -270,25 +246,17 @@ mod test {
             title: "title",
         };
 
-        let formatted = minute.formatted(
-            50,
-            &Colour::BrightBlack.into(),
-            &Colour::Red.into(),
-            &Colour::White.into(),
-        );
+        let formatted = minute
+            .formatted(
+                50,
+                &Color::Black.into(),
+                &Color::Red.into(),
+                &Color::White.into(),
+            )
+            .unwrap();
         let expected = [
-            format!(
-                "\n  \" {}{}bar{} baz{}\n",
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-                Formatting::from(Colour::Red).as_escape_string(),
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-                Formatting::from(Colour::Reset).as_escape_string(),
-            ),
-            format!(
-                "        {}author – title{}\n",
-                Formatting::from(Colour::White).as_escape_string(),
-                Formatting::from(Colour::Reset).as_escape_string(),
-            ),
+            "\n\u{1b}[0m\u{1b}[30m  \" \u{1b}[0m\u{1b}[31mbar\u{1b}[0m\u{1b}[30m baz".to_string(),
+            "\n\u{1b}[0m\u{1b}[37m        author – title\n".to_string(),
         ]
         .join("\n");
 
@@ -305,25 +273,17 @@ mod test {
             title: "title",
         };
 
-        let formatted = minute.formatted(
-            50,
-            &Colour::BrightBlack.into(),
-            &Colour::Red.into(),
-            &Colour::White.into(),
-        );
+        let formatted = minute
+            .formatted(
+                50,
+                &Color::Black.into(),
+                &Color::Red.into(),
+                &Color::White.into(),
+            )
+            .unwrap();
         let expected = [
-            format!(
-                "\n  \" {}foo {}bar{}{}\n",
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-                Formatting::from(Colour::Red).as_escape_string(),
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-                Formatting::from(Colour::Reset).as_escape_string(),
-            ),
-            format!(
-                "        {}author – title{}\n",
-                Formatting::from(Colour::White).as_escape_string(),
-                Formatting::from(Colour::Reset).as_escape_string(),
-            ),
+            "\n\u{1b}[0m\u{1b}[30m  \" foo \u{1b}[0m\u{1b}[31mbar\u{1b}[0m\u{1b}[30m".to_string(),
+            "\n\u{1b}[0m\u{1b}[37m        author – title\n".to_string(),
         ]
         .join("\n");
 
@@ -340,34 +300,24 @@ mod test {
             title: "Evil under the Sun",
         };
 
-        let formatted = minute.formatted(
-            50,
-            &Colour::BrightBlack.into(),
-            &Colour::Red.into(),
-            &Colour::White.into(),
-        );
+        let formatted = minute
+            .formatted(
+                50,
+                &Color::Black.into(),
+                &Color::Red.into(),
+                &Color::White.into(),
+            )
+            .unwrap();
         let expected = [
-            format!(
-                "\n  \" {}At 10.15 Arlena departed from her rondezvous,",
-                Formatting::from(Colour::BrightBlack).as_escape_string()
-            ),
-            String::from("    a minute or two later Patrick Redfern came"),
-            String::from("    down and registered surprise, annoyance, etc."),
-            String::from("    Christine\'s task was easy enough. Keeping her"),
-            String::from("    own watch concealed she asked Linda at twenty-"),
-            String::from("    five past eleven what time it was. Linda"),
-            String::from("    looked at her watch and replied that it was a"),
-            format!(
-                "    {}quarter to twelve{}.{}\n",
-                Formatting::from(Colour::Red).as_escape_string(),
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-                Formatting::from(Colour::Reset).as_escape_string()
-            ),
-            format!(
-                "        {}Agatha Christie – Evil under the Sun{}\n",
-                Formatting::from(Colour::White).as_escape_string(),
-                Formatting::from(Colour::Reset).as_escape_string()
-            ),
+            "\n\u{1b}[0m\u{1b}[30m  \" At 10.15 Arlena departed from her rondezvous,".to_string(),
+            "    a minute or two later Patrick Redfern came".to_string(),
+            "    down and registered surprise, annoyance, etc.".to_string(),
+            "    Christine's task was easy enough. Keeping her".to_string(),
+            "    own watch concealed she asked Linda at twenty-".to_string(),
+            "    five past eleven what time it was. Linda".to_string(),
+            "    looked at her watch and replied that it was a".to_string(),
+            "    \u{1b}[0m\u{1b}[31mquarter to twelve\u{1b}[0m\u{1b}[30m.".to_string(),
+            "\n\u{1b}[0m\u{1b}[37m        Agatha Christie – Evil under the Sun\n".to_string(),
         ]
         .join("\n");
 
@@ -384,36 +334,22 @@ mod test {
             title: "The Curious Incident of the Dog in the Night-Time",
         };
 
-        let formatted = minute.formatted(
-            30,
-            &Colour::BrightBlack.into(),
-            &Colour::Red.into(),
-            &Colour::White.into(),
-        );
+        let formatted = minute
+            .formatted(
+                30,
+                &Color::Black.into(),
+                &Color::Red.into(),
+                &Color::White.into(),
+            )
+            .unwrap();
         let expected = [
-            format!(
-                "\n  \" {}And the first stop had",
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-            ),
-            format!(
-                "    been at {}1.16pm{} which was",
-                Formatting::from(Colour::Red).as_escape_string(),
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-            ),
-            format!(
-                "    17 minutes later.{}\n",
-                Formatting::from(Colour::Reset).as_escape_string(),
-            ),
-            format!(
-                "        {}Mark Haddon – The",
-                Formatting::from(Colour::White).as_escape_string(),
-            ),
-            String::from("        Curious Incident of"),
-            String::from("        the Dog in the Night-"),
-            format!(
-                "        Time{}\n",
-                Formatting::from(Colour::Reset).as_escape_string(),
-            ),
+            "\n\u{1b}[0m\u{1b}[30m  \" And the first stop had".to_string(),
+            "    been at \u{1b}[0m\u{1b}[31m1.16pm\u{1b}[0m\u{1b}[30m which was".to_string(),
+            "    17 minutes later.".to_string(),
+            "\n\u{1b}[0m\u{1b}[37m        Mark Haddon – The".to_string(),
+            "        Curious Incident of".to_string(),
+            "        the Dog in the Night-".to_string(),
+            "        Time\n".to_string(),
         ]
         .join("\n");
 
