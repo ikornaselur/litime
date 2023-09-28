@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.0.0](https://github.com/ikornaselur/litime/compare/v2.0.0...v3.0.0) (2023-09-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* Use termcolor to render color and style for better Windows support  ([#47](https://github.com/ikornaselur/litime/issues/47))
+
+### Features
+
+* Use termcolor to render color and style for better Windows support  ([#47](https://github.com/ikornaselur/litime/issues/47)) ([63ee728](https://github.com/ikornaselur/litime/commit/63ee728277acbe742ec7df4b2ef750f5c9996313))
+
+
+### Dependencies
+
+* Remove unused features ([#46](https://github.com/ikornaselur/litime/issues/46)) ([a2389c5](https://github.com/ikornaselur/litime/commit/a2389c5ab2c53a79bb1ed6141ddb5779d2b47751))
+* Replace rand with a pseudo random picker based on current timestamp ([#44](https://github.com/ikornaselur/litime/issues/44)) ([76c6700](https://github.com/ikornaselur/litime/commit/76c6700ff59c3ef6d7cfa2528836a493d42edb3e))
+
 ## [2.0.0](https://github.com/ikornaselur/litime/compare/v1.3.0...v2.0.0) (2023-09-27)
 
 
