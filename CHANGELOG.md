@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.1](https://github.com/ikornaselur/litime/compare/v3.0.0...v3.0.1) (2023-09-28)
+
+
+### Bug Fixes
+
+* Change the default colours to be intense instead of bold ([813373f](https://github.com/ikornaselur/litime/commit/813373f81805c5a36ba83e8fc647188c92fb52f9))
+
 ## [3.0.0](https://github.com/ikornaselur/litime/compare/v2.0.0...v3.0.0) (2023-09-28)
 
 
