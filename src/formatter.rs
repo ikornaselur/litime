@@ -1,5 +1,7 @@
 use anyhow::{bail, Result};
 use std::fmt;
+use std::io::Write;
+use termcolor::{BufferWriter, Color, ColorChoice, ColorSpec, WriteColor};
 use textwrap::{fill, Options};
 
 use crate::minute::Minute;
@@ -8,107 +10,35 @@ static INITIAL_INDENT: &str = "  \" ";
 static SUBSEQUENT_INDENT: &str = "    ";
 static FOOTER_INDENT: &str = "        ";
 
-pub static FORMATTING_HELP: &str = "Formatting in the form of '<format> <colour>' or just '<colour>', such as 'bold red' or 'blue'.\nAvailable styles are: italic, bold, underline\nAvailable colours are: black, blue, cyan, green, magenta, red, white and yellow.\nEach colour can be prefixed with 'bright-'.";
+pub static FORMATTING_HELP: &str = r#"Formatting in the form of '<style> <colour>' or just '<colour>', such as 'bold red' or 'blue'.
 
-#[derive(Debug, Clone)]
-pub enum Colour {
-    Black,
-    Red,
-    Green,
-    Yellow,
-    Blue,
-    Magenta,
-    Cyan,
-    White,
-    BrightBlack,
-    BrightRed,
-    BrightGreen,
-    BrightYellow,
-    BrightBlue,
-    BrightMagenta,
-    BrightCyan,
-    BrightWhite,
-    Reset,
-}
-
-impl TryFrom<&str> for Colour {
-    type Error = anyhow::Error;
-
-    fn try_from(value: &str) -> Result<Self> {
-        match value {
-            "black" => Ok(Self::Black),
-            "red" => Ok(Self::Red),
-            "green" => Ok(Self::Green),
-            "yellow" => Ok(Self::Yellow),
-            "blue" => Ok(Self::Blue),
-            "magenta" => Ok(Self::Magenta),
-            "cyan" => Ok(Self::Cyan),
-            "white" => Ok(Self::White),
-            "bright-black" => Ok(Self::BrightBlack),
-            "bright-red" => Ok(Self::BrightRed),
-            "bright-green" => Ok(Self::BrightGreen),
-            "bright-yellow" => Ok(Self::BrightYellow),
-            "bright-blue" => Ok(Self::BrightBlue),
-            "bright-magenta" => Ok(Self::BrightMagenta),
-            "bright-cyan" => Ok(Self::BrightCyan),
-            "bright-white" => Ok(Self::BrightWhite),
-            _ => bail!("Unknown colour: {}\n\n{}", value, FORMATTING_HELP),
-        }
-    }
-}
-
-impl Colour {
-    fn as_escape_str(&self) -> &str {
-        match self {
-            Self::Black => "\u{1b}[30m",
-            Self::Red => "\u{1b}[31m",
-            Self::Green => "\u{1b}[32m",
-            Self::Yellow => "\u{1b}[33m",
-            Self::Blue => "\u{1b}[34m",
-            Self::Magenta => "\u{1b}[35m",
-            Self::Cyan => "\u{1b}[36m",
-            Self::White => "\u{1b}[37m",
-            Self::BrightBlack => "\u{1b}[90m",
-            Self::BrightRed => "\u{1b}[91m",
-            Self::BrightGreen => "\u{1b}[92m",
-            Self::BrightYellow => "\u{1b}[93m",
-            Self::BrightBlue => "\u{1b}[94m",
-            Self::BrightMagenta => "\u{1b}[95m",
-            Self::BrightCyan => "\u{1b}[96m",
-            Self::BrightWhite => "\u{1b}[97m",
-            Self::Reset => "\u{1b}[0m",
-        }
-    }
-
-    fn name(&self) -> &str {
-        match self {
-            Colour::Black => "black",
-            Colour::Red => "red",
-            Colour::Green => "green",
-            Colour::Yellow => "yellow",
-            Colour::Blue => "blue",
-            Colour::Magenta => "magenta",
-            Colour::Cyan => "cyan",
-            Colour::White => "white",
-            Colour::BrightBlack => "bright-black",
-            Colour::BrightRed => "bright-red",
-            Colour::BrightGreen => "bright-green",
-            Colour::BrightYellow => "bright-yellow",
-            Colour::BrightBlue => "bright-blue",
-            Colour::BrightMagenta => "bright-magenta",
-            Colour::BrightCyan => "bright-cyan",
-            Colour::BrightWhite => "bright-white",
-            Colour::Reset => "reset",
-        }
-    }
-}
+Available colours are: black, white, blue, cyan, green, magenta, red and yellow
+Available styles are: italic, bold, strikethrough, underline, intense and dimmed
+"#;
 
 #[derive(Debug, Clone)]
 pub enum Style {
-    Plain,
     Bold,
+    Dimmed,
+    Intense,
     Italic,
+    Plain,
+    Strikethrough,
     Underline,
+}
+
+impl Style {
+    fn name(&self) -> &str {
+        match self {
+            Self::Bold => "bold",
+            Self::Dimmed => "dimmed",
+            Self::Intense => "intense",
+            Self::Italic => "italic",
+            Self::Plain => "plain",
+            Self::Strikethrough => "strikethrough",
+            Self::Underline => "underline",
+        }
+    }
 }
 
 impl TryFrom<&str> for Style {
@@ -116,65 +46,67 @@ impl TryFrom<&str> for Style {
 
     fn try_from(value: &str) -> Result<Self> {
         match value {
-            "plain" => Ok(Self::Plain),
             "bold" => Ok(Self::Bold),
+            "dimmed" => Ok(Self::Dimmed),
+            "intense" => Ok(Self::Intense),
             "italic" => Ok(Self::Italic),
+            "plain" => Ok(Self::Plain),
+            "strikethrough" => Ok(Self::Strikethrough),
             "underline" => Ok(Self::Underline),
             _ => bail!("Unknown style: {}\n\n{}", value, FORMATTING_HELP),
         }
     }
 }
 
-impl Style {
-    fn as_escape_str(&self) -> &str {
-        match self {
-            Self::Plain => "\u{1b}[0m",
-            Self::Bold => "\u{1b}[1m",
-            Self::Italic => "\u{1b}[3m",
-            Self::Underline => "\u{1b}[4m",
-        }
-    }
-
-    fn name(&self) -> &str {
-        match self {
-            Style::Plain => "plain",
-            Style::Bold => "bold",
-            Style::Italic => "italic",
-            Style::Underline => "underline",
-        }
-    }
-}
-
 #[derive(Debug, Clone)]
 pub struct Formatting {
+    pub colour: Color,
     pub style: Style,
-    pub colour: Colour,
 }
 
-impl Formatting {
-    fn as_escape_string(&self) -> String {
-        format!(
-            "{}{}",
-            self.style.as_escape_str(),
-            self.colour.as_escape_str()
-        )
+impl From<Color> for Formatting {
+    fn from(color: Color) -> Self {
+        Self {
+            style: Style::Plain,
+            colour: color,
+        }
+    }
+}
+
+impl From<Formatting> for ColorSpec {
+    fn from(formatting: Formatting) -> Self {
+        let mut spec = ColorSpec::new();
+        spec.set_fg(Some(formatting.colour));
+        match formatting.style {
+            Style::Bold => spec.set_bold(true),
+            Style::Dimmed => spec.set_dimmed(true),
+            Style::Intense => spec.set_intense(true),
+            Style::Italic => spec.set_italic(true),
+            Style::Plain => &spec,
+            Style::Strikethrough => spec.set_strikethrough(true),
+            Style::Underline => spec.set_underline(true),
+        };
+
+        spec
     }
 }
 
 impl fmt::Display for Formatting {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let colour_name = match self.colour {
+            Color::Black => "black",
+            Color::Blue => "blue",
+            Color::Cyan => "cyan",
+            Color::Green => "green",
+            Color::Magenta => "magenta",
+            Color::Red => "red",
+            Color::White => "white",
+            Color::Yellow => "yellow",
+            _ => panic!("Unsupported colour"),
+        };
         match self.style {
-            Style::Plain => write!(f, "{}", self.colour.name()),
-            _ => write!(f, "{} {}", self.style.name(), self.colour.name()),
-        }
-    }
-}
-
-impl From<Colour> for Formatting {
-    fn from(colour: Colour) -> Self {
-        Self {
-            style: Style::Plain,
-            colour,
+            Style::Plain => write!(f, "{}", colour_name),
+            _ => write!(f, "{} {}", self.style.name(), colour_name),
         }
     }
 }
@@ -186,9 +118,9 @@ impl Minute<'_> {
         main: &Formatting,
         time: &Formatting,
         author: &Formatting,
-    ) -> String {
-        let quote = format!("\x02{}\x03{}\x02{}\x00", self.start, self.time, self.end);
-        let footer = format!("\x01{} – {}\x00", self.author, self.title);
+    ) -> Result<String> {
+        let quote = format!("{}\x00{}\x00{}", self.start, self.time, self.end);
+        let footer = format!("{} – {}", self.author, self.title);
 
         let quote_options = Options::new(width)
             .initial_indent(INITIAL_INDENT)
@@ -200,18 +132,50 @@ impl Minute<'_> {
         let quote = fill(quote.as_str(), quote_options);
         let footer = fill(footer.as_str(), footer_options);
 
-        format!("\n{}\n\n{}\n", quote, footer)
-            .replace('\x00', &Formatting::from(Colour::Reset).as_escape_string())
-            .replace('\x01', &author.as_escape_string())
-            .replace('\x02', &main.as_escape_string())
-            .replace('\x03', &time.as_escape_string())
+        // Split the quote into three sections, which will be the start, time and end
+        let parts: Vec<_> = quote.split('\x00').collect();
+
+        let main_spec: ColorSpec = main.clone().into();
+        let time_spec: ColorSpec = time.clone().into();
+        let author_spec: ColorSpec = author.clone().into();
+
+        let buffer_writer = BufferWriter::stdout(ColorChoice::Auto);
+        let mut buffer = buffer_writer.buffer();
+
+        // Initial line
+        writeln!(&mut buffer)?;
+
+        // First part of main colour
+        buffer.set_color(&main_spec)?;
+        write!(&mut buffer, "{}", parts[0])?;
+
+        // The time itself
+        buffer.set_color(&time_spec)?;
+        write!(&mut buffer, "{}", parts[1])?;
+
+        // Rest of the main colour
+        buffer.set_color(&main_spec)?;
+        write!(&mut buffer, "{}", parts[2])?;
+
+        // Two lines between quote and author
+        writeln!(&mut buffer)?;
+        writeln!(&mut buffer)?;
+
+        // Author
+        buffer.set_color(&author_spec)?;
+        write!(&mut buffer, "{}", footer)?;
+
+        // End with new line
+        writeln!(&mut buffer)?;
+
+        Ok(String::from_utf8(buffer.into_inner())?)
     }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
-    use pretty_assertions::assert_eq;
+    //use pretty_assertions::assert_eq;
 
     #[test]
     fn wrapped_quote() {
@@ -223,37 +187,21 @@ mod test {
             title: "title",
         };
 
-        let formatted = minute.formatted(
-            20,
-            &Colour::BrightBlack.into(),
-            &Colour::Red.into(),
-            &Colour::White.into(),
-        );
+        let formatted = minute
+            .formatted(
+                20,
+                &Color::Black.into(),
+                &Color::Red.into(),
+                &Color::White.into(),
+            )
+            .unwrap();
         let expected = [
-            format!(
-                "\n  \" {}black black",
-                Formatting::from(Colour::BrightBlack).as_escape_string()
-            ),
-            format!(
-                "    black {}red red",
-                Formatting::from(Colour::Red).as_escape_string()
-            ),
-            format!(
-                "    red red{} black",
-                Formatting::from(Colour::BrightBlack).as_escape_string()
-            ),
-            format!(
-                "    black black{}\n",
-                Formatting::from(Colour::Reset).as_escape_string()
-            ),
-            format!(
-                "        {}author –",
-                Formatting::from(Colour::White).as_escape_string()
-            ),
-            format!(
-                "        title{}\n",
-                Formatting::from(Colour::Reset).as_escape_string()
-            ),
+            "\n\u{1b}[0m\u{1b}[30m  \" black black".to_string(),
+            "    black \u{1b}[0m\u{1b}[31mred red".to_string(),
+            "    red red\u{1b}[0m\u{1b}[30m black".to_string(),
+            "    black black\n".to_string(),
+            "\u{1b}[0m\u{1b}[37m        author –".to_string(),
+            "        title\n".to_string(),
         ]
         .join("\n");
 
@@ -270,25 +218,18 @@ mod test {
             title: "title",
         };
 
-        let formatted = minute.formatted(
-            50,
-            &Colour::BrightBlack.into(),
-            &Colour::Red.into(),
-            &Colour::White.into(),
-        );
+        let formatted = minute
+            .formatted(
+                50,
+                &Color::Black.into(),
+                &Color::Red.into(),
+                &Color::White.into(),
+            )
+            .unwrap();
         let expected = [
-            format!(
-                "\n  \" {}foo {}bar{} baz{}\n",
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-                Formatting::from(Colour::Red).as_escape_string(),
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-                Formatting::from(Colour::Reset).as_escape_string(),
-            ),
-            format!(
-                "        {}author – title{}\n",
-                Formatting::from(Colour::White).as_escape_string(),
-                Formatting::from(Colour::Reset).as_escape_string(),
-            ),
+            "\n\u{1b}[0m\u{1b}[30m  \" foo \u{1b}[0m\u{1b}[31mbar\u{1b}[0m\u{1b}[30m baz"
+                .to_string(),
+            "\n\u{1b}[0m\u{1b}[37m        author – title\n".to_string(),
         ]
         .join("\n");
 
@@ -305,25 +246,17 @@ mod test {
             title: "title",
         };
 
-        let formatted = minute.formatted(
-            50,
-            &Colour::BrightBlack.into(),
-            &Colour::Red.into(),
-            &Colour::White.into(),
-        );
+        let formatted = minute
+            .formatted(
+                50,
+                &Color::Black.into(),
+                &Color::Red.into(),
+                &Color::White.into(),
+            )
+            .unwrap();
         let expected = [
-            format!(
-                "\n  \" {}{}bar{} baz{}\n",
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-                Formatting::from(Colour::Red).as_escape_string(),
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-                Formatting::from(Colour::Reset).as_escape_string(),
-            ),
-            format!(
-                "        {}author – title{}\n",
-                Formatting::from(Colour::White).as_escape_string(),
-                Formatting::from(Colour::Reset).as_escape_string(),
-            ),
+            "\n\u{1b}[0m\u{1b}[30m  \" \u{1b}[0m\u{1b}[31mbar\u{1b}[0m\u{1b}[30m baz".to_string(),
+            "\n\u{1b}[0m\u{1b}[37m        author – title\n".to_string(),
         ]
         .join("\n");
 
@@ -340,25 +273,17 @@ mod test {
             title: "title",
         };
 
-        let formatted = minute.formatted(
-            50,
-            &Colour::BrightBlack.into(),
-            &Colour::Red.into(),
-            &Colour::White.into(),
-        );
+        let formatted = minute
+            .formatted(
+                50,
+                &Color::Black.into(),
+                &Color::Red.into(),
+                &Color::White.into(),
+            )
+            .unwrap();
         let expected = [
-            format!(
-                "\n  \" {}foo {}bar{}{}\n",
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-                Formatting::from(Colour::Red).as_escape_string(),
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-                Formatting::from(Colour::Reset).as_escape_string(),
-            ),
-            format!(
-                "        {}author – title{}\n",
-                Formatting::from(Colour::White).as_escape_string(),
-                Formatting::from(Colour::Reset).as_escape_string(),
-            ),
+            "\n\u{1b}[0m\u{1b}[30m  \" foo \u{1b}[0m\u{1b}[31mbar\u{1b}[0m\u{1b}[30m".to_string(),
+            "\n\u{1b}[0m\u{1b}[37m        author – title\n".to_string(),
         ]
         .join("\n");
 
@@ -375,34 +300,24 @@ mod test {
             title: "Evil under the Sun",
         };
 
-        let formatted = minute.formatted(
-            50,
-            &Colour::BrightBlack.into(),
-            &Colour::Red.into(),
-            &Colour::White.into(),
-        );
+        let formatted = minute
+            .formatted(
+                50,
+                &Color::Black.into(),
+                &Color::Red.into(),
+                &Color::White.into(),
+            )
+            .unwrap();
         let expected = [
-            format!(
-                "\n  \" {}At 10.15 Arlena departed from her rondezvous,",
-                Formatting::from(Colour::BrightBlack).as_escape_string()
-            ),
-            String::from("    a minute or two later Patrick Redfern came"),
-            String::from("    down and registered surprise, annoyance, etc."),
-            String::from("    Christine\'s task was easy enough. Keeping her"),
-            String::from("    own watch concealed she asked Linda at twenty-"),
-            String::from("    five past eleven what time it was. Linda"),
-            String::from("    looked at her watch and replied that it was a"),
-            format!(
-                "    {}quarter to twelve{}.{}\n",
-                Formatting::from(Colour::Red).as_escape_string(),
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-                Formatting::from(Colour::Reset).as_escape_string()
-            ),
-            format!(
-                "        {}Agatha Christie – Evil under the Sun{}\n",
-                Formatting::from(Colour::White).as_escape_string(),
-                Formatting::from(Colour::Reset).as_escape_string()
-            ),
+            "\n\u{1b}[0m\u{1b}[30m  \" At 10.15 Arlena departed from her rondezvous,".to_string(),
+            "    a minute or two later Patrick Redfern came".to_string(),
+            "    down and registered surprise, annoyance, etc.".to_string(),
+            "    Christine's task was easy enough. Keeping her".to_string(),
+            "    own watch concealed she asked Linda at twenty-".to_string(),
+            "    five past eleven what time it was. Linda".to_string(),
+            "    looked at her watch and replied that it was a".to_string(),
+            "    \u{1b}[0m\u{1b}[31mquarter to twelve\u{1b}[0m\u{1b}[30m.".to_string(),
+            "\n\u{1b}[0m\u{1b}[37m        Agatha Christie – Evil under the Sun\n".to_string(),
         ]
         .join("\n");
 
@@ -419,36 +334,22 @@ mod test {
             title: "The Curious Incident of the Dog in the Night-Time",
         };
 
-        let formatted = minute.formatted(
-            30,
-            &Colour::BrightBlack.into(),
-            &Colour::Red.into(),
-            &Colour::White.into(),
-        );
+        let formatted = minute
+            .formatted(
+                30,
+                &Color::Black.into(),
+                &Color::Red.into(),
+                &Color::White.into(),
+            )
+            .unwrap();
         let expected = [
-            format!(
-                "\n  \" {}And the first stop had",
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-            ),
-            format!(
-                "    been at {}1.16pm{} which was",
-                Formatting::from(Colour::Red).as_escape_string(),
-                Formatting::from(Colour::BrightBlack).as_escape_string(),
-            ),
-            format!(
-                "    17 minutes later.{}\n",
-                Formatting::from(Colour::Reset).as_escape_string(),
-            ),
-            format!(
-                "        {}Mark Haddon – The",
-                Formatting::from(Colour::White).as_escape_string(),
-            ),
-            String::from("        Curious Incident of"),
-            String::from("        the Dog in the Night-"),
-            format!(
-                "        Time{}\n",
-                Formatting::from(Colour::Reset).as_escape_string(),
-            ),
+            "\n\u{1b}[0m\u{1b}[30m  \" And the first stop had".to_string(),
+            "    been at \u{1b}[0m\u{1b}[31m1.16pm\u{1b}[0m\u{1b}[30m which was".to_string(),
+            "    17 minutes later.".to_string(),
+            "\n\u{1b}[0m\u{1b}[37m        Mark Haddon – The".to_string(),
+            "        Curious Incident of".to_string(),
+            "        the Dog in the Night-".to_string(),
+            "        Time\n".to_string(),
         ]
         .join("\n");
 
