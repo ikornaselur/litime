@@ -1,8 +1,9 @@
 use anyhow::{bail, Result};
 use clap::Parser;
+use termcolor::Color;
 use time::{format_description, OffsetDateTime, Time};
 
-use litime::formatter::{Colour, Formatting, Style, FORMATTING_HELP};
+use litime::formatter::{Formatting, Style, FORMATTING_HELP};
 use litime::minute::get_minute;
 
 static MIN_WIDTH: usize = 20;
@@ -10,8 +11,19 @@ static MAX_WIDTH: usize = 120;
 static DEFAULT_WIDTH: usize = 80; // If we fail to get terminal width
 static MARGIN: usize = 5; // Margin on the right of the comment, only used when automatically detecting the terminal width
 
+/// Hello
 #[derive(Parser, Debug)]
-#[command(version, about)]
+#[command(version, about=r#"A command line tool to dispaly the current time-ish with a literature quote.
+
+Parts of the quote can be formatted with formatting strings, in the form of '<style> <colour>' or just '<colour>'
+Available colours are:
+
+    black, white, blue, cyan, green, magenta, red and yellow
+
+Available styles are:
+
+    bold, dimmed, intense, italic, strikethrough and underline 
+"#)]
 struct Args {
     /// A timestamp to get a quote for
     ///
@@ -23,21 +35,21 @@ struct Args {
     /// Formatting of the quote, excluding the time
     #[arg(long, short, value_parser = is_valid_format, default_value_t = Formatting {
         style: Style::Plain,
-        colour: Colour::White
+        colour: Color::White
     })]
     main_formatting: Formatting,
 
     /// Formatting of the time part of the quote
     #[arg(long, short, value_parser = is_valid_format, default_value_t = Formatting {
         style: Style::Bold,
-        colour: Colour::Red
+        colour: Color::Red
     })]
     time_formatting: Formatting,
 
     /// Formatting of the author and book below the quote
     #[arg(long, short, value_parser = is_valid_format, default_value_t = Formatting {
         style: Style::Plain,
-        colour: Colour::White
+        colour: Color::White
     })]
     author_formatting: Formatting,
 
@@ -77,15 +89,12 @@ fn main() -> Result<()> {
             .unwrap_or(DEFAULT_WIDTH)
     });
 
-    print!(
-        "{}",
-        minute.formatted(
-            std::cmp::max(width, MIN_WIDTH),
-            &args.main_formatting,
-            &args.time_formatting,
-            &args.author_formatting
-        )
-    );
+    minute.formatted(
+        std::cmp::max(width, MIN_WIDTH),
+        &args.main_formatting,
+        &args.time_formatting,
+        &args.author_formatting,
+    )?;
 
     Ok(())
 }
@@ -95,6 +104,20 @@ fn is_timestamp(val: &str) -> Result<String> {
     match Time::parse(val, &format) {
         Ok(_) => Ok(val.to_string()),
         _ => bail!("The value must be a valid 24-hour timestamp in the format HH:MM"),
+    }
+}
+
+fn color_from_str(value: &str) -> Result<Color> {
+    match value {
+        "black" => Ok(Color::Black),
+        "blue" => Ok(Color::Blue),
+        "cyan" => Ok(Color::Cyan),
+        "green" => Ok(Color::Green),
+        "magenta" => Ok(Color::Magenta),
+        "red" => Ok(Color::Red),
+        "white" => Ok(Color::White),
+        "yellow" => Ok(Color::Yellow),
+        _ => bail!("Invalid colour"),
     }
 }
 
@@ -111,12 +134,13 @@ fn is_timestamp(val: &str) -> Result<String> {
 /// ```
 fn is_valid_format(val: &str) -> Result<Formatting> {
     let parts: Vec<&str> = val.split(' ').collect();
+
     if parts.len() == 1 {
-        Ok(Colour::try_from(parts[0])?.into())
+        Ok(color_from_str(parts[0])?.into())
     } else if parts.len() == 2 {
         Ok(Formatting {
             style: Style::try_from(parts[0])?,
-            colour: Colour::try_from(parts[1])?,
+            colour: color_from_str(parts[1])?,
         })
     } else {
         bail!("Invalid format.\n\n{}", FORMATTING_HELP)
