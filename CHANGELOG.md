@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.0.2](https://github.com/ikornaselur/litime/compare/v3.0.1...v3.0.2) (2023-09-29)
+
+
+### Miscellaneous
+
+* Add dependabot ([#49](https://github.com/ikornaselur/litime/issues/49)) ([ee377a0](https://github.com/ikornaselur/litime/commit/ee377a0cdc7acf7a9adb0c7c39ad883bb4490cd8))
+
+
+### Dependencies
+
+* bump clap from 4.4.5 to 4.4.6 ([#51](https://github.com/ikornaselur/litime/issues/51)) ([6773ed0](https://github.com/ikornaselur/litime/commit/6773ed0b65b6e577c78d7a67ba3e1453a3fd1818))
+* **github-actions:** bump actions/checkout from 2 to 4 ([#50](https://github.com/ikornaselur/litime/issues/50)) ([47c7ba3](https://github.com/ikornaselur/litime/commit/47c7ba3da9fbf4d57852545793b46a32b1895f24))
+* Replace termsize with terminal_size, which is maintained ([#53](https://github.com/ikornaselur/litime/issues/53)) ([bfee3d5](https://github.com/ikornaselur/litime/commit/bfee3d5fb64460a1759605d2b186d61d002a017e))
+
 ## [3.0.1](https://github.com/ikornaselur/litime/compare/v3.0.0...v3.0.1) (2023-09-28)
 
 
