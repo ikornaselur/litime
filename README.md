@@ -27,7 +27,7 @@ cargo install litime
 ### Homebrew
 
 ```bash
-brew install install ikornaselur/tap/litime
+brew install ikornaselur/tap/litime
 ```
 
 ## Attributions
