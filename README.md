@@ -18,7 +18,17 @@ Binaries are built with Github Actions and attached to releases for:
 * Linux x86_64
 * Linux armv7
 
-You can also install directly with `cargo install litime` if you use cargo
+### Cargo
+
+```bash
+cargo install litime
+```
+
+### Homebrew
+
+```bash
+brew install install ikornaselur/tap/litime
+```
 
 ## Attributions
 ### Source of quotes
