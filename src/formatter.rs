@@ -114,7 +114,7 @@ impl fmt::Display for Formatting {
 impl Minute<'_> {
     pub fn formatted(
         &self,
-        width: usize,
+        width: u16,
         main: &Formatting,
         time: &Formatting,
         author: &Formatting,
@@ -122,10 +122,10 @@ impl Minute<'_> {
         let quote = format!("{}\x00{}\x00{}", self.start, self.time, self.end);
         let footer = format!("{} – {}", self.author, self.title);
 
-        let quote_options = Options::new(width)
+        let quote_options = Options::new(width.into())
             .initial_indent(INITIAL_INDENT)
             .subsequent_indent(SUBSEQUENT_INDENT);
-        let footer_options = Options::new(width)
+        let footer_options = Options::new(width.into())
             .initial_indent(FOOTER_INDENT)
             .subsequent_indent(FOOTER_INDENT);
 

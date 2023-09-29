@@ -1,15 +1,16 @@
 use anyhow::{bail, Result};
 use clap::Parser;
 use termcolor::Color;
+use terminal_size::{terminal_size, Width};
 use time::{format_description, OffsetDateTime, Time};
 
 use litime::formatter::{Formatting, Style, FORMATTING_HELP};
 use litime::minute::get_minute;
 
-static MIN_WIDTH: usize = 20;
-static MAX_WIDTH: usize = 120;
-static DEFAULT_WIDTH: usize = 80; // If we fail to get terminal width
-static MARGIN: usize = 5; // Margin on the right of the comment, only used when automatically detecting the terminal width
+static MIN_WIDTH: u16 = 20;
+static MAX_WIDTH: u16 = 120;
+static DEFAULT_WIDTH: u16 = 80; // If we fail to get terminal width
+static MARGIN: u16 = 5; // Margin on the right of the comment, only used when automatically detecting the terminal width
 
 /// Hello
 #[derive(Parser, Debug)]
@@ -64,11 +65,11 @@ struct Args {
     ///
     /// If not set, then litime will try to detect the width of the terminal window, up to MAX_WIDTH (default 120 columns)
     #[arg(short, long)]
-    width: Option<usize>,
+    width: Option<u16>,
 
     /// The max width of the quote when not set by the WIDTH option
     #[arg(long, default_value_t = MAX_WIDTH)]
-    max_width: usize,
+    max_width: u16,
 }
 
 fn main() -> Result<()> {
@@ -86,10 +87,9 @@ fn main() -> Result<()> {
     let minute = get_minute(&timestamp, args.sfw)?;
     let max_width = args.max_width;
 
-    let width: usize = args.width.unwrap_or_else(|| {
-        termsize::get()
-            .map(|size| std::cmp::min(size.cols as usize, max_width) - MARGIN)
-            .unwrap_or(DEFAULT_WIDTH)
+    let width = args.width.unwrap_or_else(|| match terminal_size() {
+        Some((Width(width), _)) => std::cmp::min(width, max_width) - MARGIN,
+        None => DEFAULT_WIDTH,
     });
 
     println!(
