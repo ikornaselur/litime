@@ -9,7 +9,7 @@ jobs:
     name: Linux ARMv7
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
       - uses: actions-rs/toolchain@v1
@@ -30,7 +30,7 @@ jobs:
     name: Linux 64-bit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
       - uses: actions-rs/toolchain@v1
@@ -48,7 +48,7 @@ jobs:
     name: macOS 64-bit x86
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
       - uses: actions-rs/toolchain@v1
@@ -66,7 +66,7 @@ jobs:
     name: macOS 64-bit aarch64
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
       - uses: actions-rs/toolchain@v1
@@ -86,7 +86,7 @@ jobs:
     name: Windows 64-bit
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
       - uses: actions-rs/toolchain@v1
