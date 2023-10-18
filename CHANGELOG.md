@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.4](https://github.com/ikornaselur/litime/compare/v3.0.3...v3.0.4) (2023-10-18)
+
+
+### Miscellaneous
+
+* Add linux arm64 build target ([#60](https://github.com/ikornaselur/litime/issues/60)) ([1858b2b](https://github.com/ikornaselur/litime/commit/1858b2bfe2764986be10ac568b0ca3d1913caad5))
+
 ## [3.0.3](https://github.com/ikornaselur/litime/compare/v3.0.2...v3.0.3) (2023-10-18)
 
 
