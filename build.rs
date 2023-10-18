@@ -27,7 +27,7 @@ fn get_quotes() -> HashMap<String, Vec<Quote>> {
         // Split the file name into name and extension
         let file_name_string = file_name.into_string().unwrap();
         let (key, ext) = file_name_string.split_once('.').unwrap();
-        let key = key.clone().to_string();
+        let key = key.to_string();
 
         if ext == "json" {
             let contents = fs::read_to_string(file.path()).unwrap();
