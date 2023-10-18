@@ -14,6 +14,10 @@ jobs:
             os: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
             command: cross
+          - name: linux-arm64
+            os: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            command: cross
           - name: linux-amd64
             os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
