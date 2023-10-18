@@ -5,98 +5,68 @@ on:
 name: Build artefacts
 
 jobs:
-  armv7-unknown-linux-gnueabihf:
-    name: Linux ARMv7
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include: 
+          - name: linux-armv7
+            os: ubuntu-latest
+            target: armv7-unknown-linux-gnueabihf
+            command: cross
+          - name: linux-amd64
+            os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            command: cargo
+          - name: win-amd64
+            os: windows-latest
+            target: x86_64-pc-windows-msvc
+            command: cargo
+          - name: macos-amd64
+            os: macos-latest
+            target: x86_64-apple-darwin
+            command: cargo
+          - name: macos-arm64
+            os: macos-latest
+            target: aarch64-apple-darwin
+            command: cargo
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
-      - uses: actions-rs/toolchain@v1
+
+      - name: Install stable toolchain
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          target: armv7-unknown-linux-gnueabihf
-          override: true
-      - uses: actions-rs/cargo@v1
+          targets: ${{ matrix.target }}
+
+      - name: Install Cross
+        if: matrix.command == 'cross'
+        shell: bash
+        run: |
+          curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+          cargo binstall --no-confirm cross
+ 
+      - name: Build Binary
+        run: ${{ matrix.command }} build --verbose --locked --release --target ${{ matrix.target }}
+
+      - name: Rename binary for release (windows)
+        if: ${{ startsWith(matrix.os, 'windows') }}
+        run: Rename-Item target\${{ matrix.target }}\release\litime.exe litime-${{ matrix.target }}.exe
+
+      - name: Rename binary for release (other)
+        if: ${{ !startsWith(matrix.os, 'windows') }}
+        run: mv target/${{ matrix.target }}/release/litime target/${{ matrix.target }}/release/litime-${{ matrix.target }}
+
+      - name: Attach artefact to release (windows)
+        uses: softprops/action-gh-release@v1
+        if: ${{ startsWith(matrix.os, 'windows') }}
         with:
-          use-cross: true
-          command: build
-          args: --target armv7-unknown-linux-gnueabihf --release
-      - run: mv target/armv7-unknown-linux-gnueabihf/release/litime target/armv7-unknown-linux-gnueabihf/release/litime-armv7-unknown-linux-gnueabihf
-      - uses: softprops/action-gh-release@v1
+          files: target/${{ matrix.target }}/release/litime-${{ matrix.target }}.exe
+
+      - name: Attach artefact to release (other)
+        uses: softprops/action-gh-release@v1
+        if: ${{ !startsWith(matrix.os, 'windows') }}
         with:
-          files: target/armv7-unknown-linux-gnueabihf/release/litime-armv7-unknown-linux-gnueabihf
-  x86_64-unknown-linux-gnu:
-    name: Linux 64-bit
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --target x86_64-unknown-linux-gnu --release
-      - run: mv target/x86_64-unknown-linux-gnu/release/litime target/x86_64-unknown-linux-gnu/release/litime-x86_64-unknown-linux-gnu
-      - uses: softprops/action-gh-release@v1
-        with:
-          files: target/x86_64-unknown-linux-gnu/release/litime-x86_64-unknown-linux-gnu
-  x86_64-apple-darwin:
-    name: macOS 64-bit x86
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --target x86_64-apple-darwin --release
-      - run: mv target/x86_64-apple-darwin/release/litime target/x86_64-apple-darwin/release/litime-x86_64-apple-darwin
-      - uses: softprops/action-gh-release@v1
-        with:
-          files: target/x86_64-apple-darwin/release/litime-x86_64-apple-darwin
-  aarch64-apple-darwin:
-    name: macOS 64-bit aarch64
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          target: aarch64-apple-darwin
-          override: true
-      - uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --target aarch64-apple-darwin --release
-      - run: mv target/aarch64-apple-darwin/release/litime target/aarch64-apple-darwin/release/litime-aarch64-apple-darwin
-      - uses: softprops/action-gh-release@v1
-        with:
-          files: target/aarch64-apple-darwin/release/litime-aarch64-apple-darwin
-  x86_64-pc-windows-msvc:
-    name: Windows 64-bit
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --target x86_64-pc-windows-msvc --release
-      - run: Rename-Item target\x86_64-pc-windows-msvc\release\litime.exe litime-x86_64-pc-windows-msvc.exe
-      - uses: softprops/action-gh-release@v1
-        with:
-          files: target/x86_64-pc-windows-msvc/release/litime-x86_64-pc-windows-msvc.exe
+          files: target/${{ matrix.target }}/release/litime-${{ matrix.target }}
