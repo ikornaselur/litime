@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.0.3](https://github.com/ikornaselur/litime/compare/v3.0.2...v3.0.3) (2023-10-18)
+
+
+### Miscellaneous
+
+* **CI:** Replace deprecated actions-rs actions  ([#59](https://github.com/ikornaselur/litime/issues/59)) ([f011aec](https://github.com/ikornaselur/litime/commit/f011aecaa49f167944895b6d972ba7deb26f44a3))
+* Fix lint issue in build.rs ([#56](https://github.com/ikornaselur/litime/issues/56)) ([a28da38](https://github.com/ikornaselur/litime/commit/a28da38fd66f7a002271193d8b50363aaa270d8a))
+
+
+### Dependencies
+
+* bump rustix from 0.38.15 to 0.38.19 ([#58](https://github.com/ikornaselur/litime/issues/58)) ([d8af610](https://github.com/ikornaselur/litime/commit/d8af610d193b7ef8c909fde2497b69d982b0844a))
+* bump serde from 1.0.188 to 1.0.189 ([#54](https://github.com/ikornaselur/litime/issues/54)) ([4f3fc38](https://github.com/ikornaselur/litime/commit/4f3fc38bab857dd787293e096e60f6b35d319dd0))
+* bump time from 0.3.29 to 0.3.30 ([#55](https://github.com/ikornaselur/litime/issues/55)) ([82f1846](https://github.com/ikornaselur/litime/commit/82f1846baddaf7b9d42300b733217aa25c1243db))
+
 ## [3.0.2](https://github.com/ikornaselur/litime/compare/v3.0.1...v3.0.2) (2023-09-29)
 
 
