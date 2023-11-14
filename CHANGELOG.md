@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.0.5](https://github.com/ikornaselur/litime/compare/v3.0.4...v3.0.5) (2023-11-14)
+
+
+### Miscellaneous
+
+* Use https instead of ssh for git submodules ([#69](https://github.com/ikornaselur/litime/issues/69)) ([f58aadf](https://github.com/ikornaselur/litime/commit/f58aadfffa0237c52a3369aad4cc82aa87005476))
+
+
+### Dependencies
+
+* bump clap from 4.4.6 to 4.4.7 ([#62](https://github.com/ikornaselur/litime/issues/62)) ([33deea8](https://github.com/ikornaselur/litime/commit/33deea87f7d6d8d2852643a7809b18a270c6b6ac))
+* bump clap from 4.4.7 to 4.4.8 ([#68](https://github.com/ikornaselur/litime/issues/68)) ([904bc38](https://github.com/ikornaselur/litime/commit/904bc38c5ae24dab8d263da8fb78303936efc856))
+* bump serde from 1.0.189 to 1.0.190 ([#64](https://github.com/ikornaselur/litime/issues/64)) ([23edc34](https://github.com/ikornaselur/litime/commit/23edc34c7a320501d0b3974af4d231d9ebc8e0c4))
+* bump serde from 1.0.190 to 1.0.191 ([#66](https://github.com/ikornaselur/litime/issues/66)) ([6c75712](https://github.com/ikornaselur/litime/commit/6c757120690b72843111f5b406559a7bcf37840e))
+* bump serde from 1.0.191 to 1.0.192 ([#67](https://github.com/ikornaselur/litime/issues/67)) ([09544fd](https://github.com/ikornaselur/litime/commit/09544fd17e8ed444f4cf2b57d883440d36366402))
+* bump serde_json from 1.0.107 to 1.0.108 ([#65](https://github.com/ikornaselur/litime/issues/65)) ([b4b5d94](https://github.com/ikornaselur/litime/commit/b4b5d946555beac62a3def3b258fd226f5145da3))
+
 ## [3.0.4](https://github.com/ikornaselur/litime/compare/v3.0.3...v3.0.4) (2023-10-18)
 
 
