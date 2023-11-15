@@ -5,9 +5,9 @@ A simple tool to display the current time with a quote from literature.
 ## Usage
 
 _Running litime directly, which can be done on shell startup_
-![quote](.example-quote.png)
+![quote](.example-quote.png?cache=1)
 _Options_
-![help](.example-help.png)
+![help](.example-help.png?cache=1)
 
 ## Install
 
