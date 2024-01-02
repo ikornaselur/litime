@@ -1,5 +1,34 @@
 # Changelog
 
+## [3.1.0](https://github.com/ikornaselur/litime/compare/v3.0.5...v3.1.0) (2024-01-02)
+
+
+### Features
+
+* Update quotes ([#85](https://github.com/ikornaselur/litime/issues/85)) ([dff715d](https://github.com/ikornaselur/litime/commit/dff715dc8fa539dbbdb2c85f57e1f90cd9a5943f))
+
+
+### Documentation
+
+* Update screenshots in readme ([#71](https://github.com/ikornaselur/litime/issues/71)) ([7677dc1](https://github.com/ikornaselur/litime/commit/7677dc1d7e5132d246e36c2d3518464db09e35d0))
+
+
+### Miscellaneous
+
+* Use release-please manifest releaser ([#84](https://github.com/ikornaselur/litime/issues/84)) ([51f0d57](https://github.com/ikornaselur/litime/commit/51f0d5774110b895d10765c1481ab1fdc8e79e4c))
+
+
+### Dependencies
+
+* bump anyhow from 1.0.75 to 1.0.78 ([#82](https://github.com/ikornaselur/litime/issues/82)) ([de9f001](https://github.com/ikornaselur/litime/commit/de9f0012cae6e59df0a26e892cce287090a0f0e1))
+* bump clap from 4.4.10 to 4.4.11 ([#76](https://github.com/ikornaselur/litime/issues/76)) ([ba2eb08](https://github.com/ikornaselur/litime/commit/ba2eb08ea89dd6ce7bb76ffd44afc4f20fbb86c8))
+* bump clap from 4.4.11 to 4.4.12 ([#81](https://github.com/ikornaselur/litime/issues/81)) ([b015e3a](https://github.com/ikornaselur/litime/commit/b015e3ab4f9f25cf0f54a7c094b02d53c994f177))
+* bump clap from 4.4.8 to 4.4.10 ([#75](https://github.com/ikornaselur/litime/issues/75)) ([d1883f7](https://github.com/ikornaselur/litime/commit/d1883f7b00aa1804b99c0607a0415ccd6e9cfe66))
+* bump serde from 1.0.192 to 1.0.193 ([#72](https://github.com/ikornaselur/litime/issues/72)) ([2a00fcd](https://github.com/ikornaselur/litime/commit/2a00fcd584a91dd69f16095226914d2f9bff878b))
+* bump serde_json from 1.0.108 to 1.0.109 ([#83](https://github.com/ikornaselur/litime/issues/83)) ([94b6118](https://github.com/ikornaselur/litime/commit/94b61183156b8d9fe6259940dcef46e308715c14))
+* bump termcolor from 1.3.0 to 1.4.0 ([#70](https://github.com/ikornaselur/litime/issues/70)) ([457af48](https://github.com/ikornaselur/litime/commit/457af4840911b8b347444d104f0bde0a319eee68))
+* bump time from 0.3.30 to 0.3.31 ([#78](https://github.com/ikornaselur/litime/issues/78)) ([0e55f9e](https://github.com/ikornaselur/litime/commit/0e55f9e2e077e9425cb95b75353ed8157f096679))
+
 ## [3.0.5](https://github.com/ikornaselur/litime/compare/v3.0.4...v3.0.5) (2023-11-14)
 
 
