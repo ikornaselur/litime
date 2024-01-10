@@ -18,7 +18,7 @@ textwrap = { version = "0.16", default-features = false, features = ["smawk"] }
 clap = { version = "4", features = ["derive"] }
 time = { version = "0.3", default-features = false, features = ["local-offset", "parsing"] }
 anyhow = "1"
-termcolor = "1.4.0"
+termcolor = "1.4.1"
 terminal_size = "0.3.0"
 
 [profile.release]
