@@ -179,7 +179,7 @@ checksum = "da2479e8c062e40bf0066ffa0bc823de0a9368974af99c9f6df941d2c231e03f"
 
 [[package]]
 name = "litime"
-version = "3.1.0"
+version = "3.2.0"
 dependencies = [
  "anyhow",
  "clap",
