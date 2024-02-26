@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.2.0](https://github.com/ikornaselur/litime/compare/v3.1.0...v3.2.0) (2024-02-26)
+
+
+### Features
+
+* Update quotes ([#109](https://github.com/ikornaselur/litime/issues/109)) ([2a14a9a](https://github.com/ikornaselur/litime/commit/2a14a9af7bf4b5219b151fb6f0c64057e35da03a))
+
+
+### Dependencies
+
+* bump anyhow from 1.0.78 to 1.0.80 ([#105](https://github.com/ikornaselur/litime/issues/105)) ([db39897](https://github.com/ikornaselur/litime/commit/db398978826381749962234b48142c98d6bc98d5))
+* bump clap from 4.4.12 to 4.5.1 ([#104](https://github.com/ikornaselur/litime/issues/104)) ([175d0c1](https://github.com/ikornaselur/litime/commit/175d0c1cf7795b850bc37d791d44cd7fdcdc5246))
+* bump serde from 1.0.193 to 1.0.197 ([#108](https://github.com/ikornaselur/litime/issues/108)) ([9cbca44](https://github.com/ikornaselur/litime/commit/9cbca44fb0fcd5041fe97277a7c5a76b0b630ab7))
+* bump serde_json from 1.0.109 to 1.0.114 ([#107](https://github.com/ikornaselur/litime/issues/107)) ([490cb09](https://github.com/ikornaselur/litime/commit/490cb092105b29f958b1ab3a39addcc384099e77))
+* bump termcolor from 1.4.0 to 1.4.1 ([#93](https://github.com/ikornaselur/litime/issues/93)) ([901639f](https://github.com/ikornaselur/litime/commit/901639fba801801ca0c90a0d634cd1cb5170e2fb))
+* bump textwrap from 0.16.0 to 0.16.1 ([#106](https://github.com/ikornaselur/litime/issues/106)) ([cc40d05](https://github.com/ikornaselur/litime/commit/cc40d0572877bbbcde7258d1d9537155e5c82a70))
+* bump time from 0.3.31 to 0.3.34 ([#102](https://github.com/ikornaselur/litime/issues/102)) ([41531fc](https://github.com/ikornaselur/litime/commit/41531fcf6973e6d3398fb03a83a694c996d34da7))
+
 ## [3.1.0](https://github.com/ikornaselur/litime/compare/v3.0.5...v3.1.0) (2024-01-02)
 
 
