@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.2.1](https://github.com/ikornaselur/litime/compare/v3.2.0...v3.2.1) (2024-03-12)
+
+
+### Dependencies
+
+* bump clap from 4.5.1 to 4.5.2 ([#111](https://github.com/ikornaselur/litime/issues/111)) ([14ad6ac](https://github.com/ikornaselur/litime/commit/14ad6ac6f53e697540e45cae1dd03b36ded73fe3))
+* **github-actions:** bump softprops/action-gh-release from 1 to 2 ([#113](https://github.com/ikornaselur/litime/issues/113)) ([0f9318d](https://github.com/ikornaselur/litime/commit/0f9318df6d037d8e8c2ebda5ba455a1281fb4795))
+
 ## [3.2.0](https://github.com/ikornaselur/litime/compare/v3.1.0...v3.2.0) (2024-02-26)
 
 
