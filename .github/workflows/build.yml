@@ -64,13 +64,13 @@ jobs:
         run: mv target/${{ matrix.target }}/release/litime target/${{ matrix.target }}/release/litime-${{ matrix.target }}
 
       - name: Attach artefact to release (windows)
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: ${{ startsWith(matrix.os, 'windows') }}
         with:
           files: target/${{ matrix.target }}/release/litime-${{ matrix.target }}.exe
 
       - name: Attach artefact to release (other)
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: ${{ !startsWith(matrix.os, 'windows') }}
         with:
           files: target/${{ matrix.target }}/release/litime-${{ matrix.target }}
