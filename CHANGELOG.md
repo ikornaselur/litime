@@ -1,5 +1,25 @@
 # Changelog
 
+## [3.3.0](https://github.com/ikornaselur/litime/compare/v3.2.0...v3.3.0) (2024-10-28)
+
+
+### Features
+
+* Update quotes ([#144](https://github.com/ikornaselur/litime/issues/144)) ([a75cc8a](https://github.com/ikornaselur/litime/commit/a75cc8aaad2fef8173d8766d7d22419637700ab8))
+
+
+### Dependencies
+
+* bump anyhow from 1.0.80 to 1.0.81 ([#114](https://github.com/ikornaselur/litime/issues/114)) ([8faeced](https://github.com/ikornaselur/litime/commit/8faecede1738ca688e0e2d0fcd5e3a4f287c418c))
+* bump clap from 4.5.1 to 4.5.2 ([#111](https://github.com/ikornaselur/litime/issues/111)) ([14ad6ac](https://github.com/ikornaselur/litime/commit/14ad6ac6f53e697540e45cae1dd03b36ded73fe3))
+* bump clap from 4.5.2 to 4.5.4 ([#116](https://github.com/ikornaselur/litime/issues/116)) ([35d472a](https://github.com/ikornaselur/litime/commit/35d472a67feac58461bf8503706533080f5638c1))
+* bump serde from 1.0.197 to 1.0.198 ([#121](https://github.com/ikornaselur/litime/issues/121)) ([d3b0f2d](https://github.com/ikornaselur/litime/commit/d3b0f2d3d5f97a12e796e6eee9b749633782369b))
+* bump serde from 1.0.198 to 1.0.200 ([#124](https://github.com/ikornaselur/litime/issues/124)) ([819a0be](https://github.com/ikornaselur/litime/commit/819a0be1d27c9f5c8e099868aa7f65c63f613592))
+* bump serde_json from 1.0.114 to 1.0.116 ([#122](https://github.com/ikornaselur/litime/issues/122)) ([885c1ad](https://github.com/ikornaselur/litime/commit/885c1ad05a58e24b7166bd45d89e51b3998e28aa))
+* bump time from 0.3.34 to 0.3.36 ([#120](https://github.com/ikornaselur/litime/issues/120)) ([f1c552b](https://github.com/ikornaselur/litime/commit/f1c552bb6e888dccc3f8976f276e12860313b017))
+* **github-actions:** bump softprops/action-gh-release from 1 to 2 ([#113](https://github.com/ikornaselur/litime/issues/113)) ([0f9318d](https://github.com/ikornaselur/litime/commit/0f9318df6d037d8e8c2ebda5ba455a1281fb4795))
+* Update dependencies ([#145](https://github.com/ikornaselur/litime/issues/145)) ([7a3397e](https://github.com/ikornaselur/litime/commit/7a3397e17379f8f87f966c938a8c6e5197fc6353))
+
 ## [3.2.0](https://github.com/ikornaselur/litime/compare/v3.1.0...v3.2.0) (2024-02-26)
 
 
