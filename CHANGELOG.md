@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.3.1](https://github.com/ikornaselur/litime/compare/v3.3.0...v3.3.1) (2024-11-05)
+
+
+### Dependencies
+
+* bump terminal_size from 0.3.0 to 0.4.0 ([#147](https://github.com/ikornaselur/litime/issues/147)) ([c864198](https://github.com/ikornaselur/litime/commit/c86419878b3cef03f08d032a12f688336a50f425))
+
 ## [3.3.0](https://github.com/ikornaselur/litime/compare/v3.2.0...v3.3.0) (2024-10-28)
 
 
