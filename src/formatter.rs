@@ -10,11 +10,11 @@ static INITIAL_INDENT: &str = "  \" ";
 static SUBSEQUENT_INDENT: &str = "    ";
 static FOOTER_INDENT: &str = "        ";
 
-pub static FORMATTING_HELP: &str = r#"Formatting in the form of '<style> <colour>' or just '<colour>', such as 'bold red' or 'blue'.
+pub static FORMATTING_HELP: &str = r"Formatting in the form of '<style> <colour>' or just '<colour>', such as 'bold red' or 'blue'.
 
 Available colours are: black, white, blue, cyan, green, magenta, red and yellow
 Available styles are: italic, bold, strikethrough, underline, intense and dimmed
-"#;
+";
 
 #[derive(Debug, Clone)]
 pub enum Style {
@@ -105,7 +105,7 @@ impl fmt::Display for Formatting {
             _ => panic!("Unsupported colour"),
         };
         match self.style {
-            Style::Plain => write!(f, "{}", colour_name),
+            Style::Plain => write!(f, "{colour_name}"),
             _ => write!(f, "{} {}", self.style.name(), colour_name),
         }
     }
@@ -163,7 +163,7 @@ impl Minute<'_> {
 
         // Author
         buffer.set_color(&author_spec)?;
-        write!(&mut buffer, "{}", footer)?;
+        write!(&mut buffer, "{footer}")?;
 
         // End with new line
         writeln!(&mut buffer)?;

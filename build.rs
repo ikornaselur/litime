@@ -58,7 +58,7 @@ fn get_next_timestamp(ts: String) -> String {
     if hours == 24 {
         hours = 0;
     }
-    format!("{:02}_{:02}", hours, minutes)
+    format!("{hours:02}_{minutes:02}")
 }
 
 fn replace(s: &str) -> String {
@@ -84,7 +84,7 @@ fn main() {
     //
     // static QUOTE_XX_YY_Z: Minute = Minute{title: quote.title, author: quote.author, start: quote.quote_first, time: quote.quote_time_case, end: quote.quote_last};
     let mut quotes_string = String::new();
-    for (key, value) in quotes.iter() {
+    for (key, value) in &quotes {
         for (index, quote) in value.iter().enumerate() {
             quotes_string.push_str(&format!(
                 "static QUOTE_{}_{}: Minute = Minute{{title: \"{}\", author: \"{}\", start: \"{}\", time: \"{}\", end: \"{}\"}};\n",
@@ -122,9 +122,9 @@ fn main() {
         let mut all_quotes: Vec<String> = Vec::new();
 
         for (index, quote) in value.iter().enumerate() {
-            all_quotes.push(format!("&QUOTE_{}_{}", key, index));
+            all_quotes.push(format!("&QUOTE_{key}_{index}"));
             if quote.sfw == "yes" {
-                sfw_quotes.push(format!("&QUOTE_{}_{}", key, index));
+                sfw_quotes.push(format!("&QUOTE_{key}_{index}"));
             }
         }
 
