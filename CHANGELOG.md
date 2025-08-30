@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.4.0](https://github.com/ikornaselur/litime/compare/v3.3.0...v3.4.0) (2025-08-30)
+
+
+### Features
+
+* Add support to override time zone with `--tz` ([#170](https://github.com/ikornaselur/litime/issues/170)) ([7d8462e](https://github.com/ikornaselur/litime/commit/7d8462eb86c7e487bf21a2bbe319cf15b01aac32))
+
+
+### Dependencies
+
+* bump terminal_size from 0.3.0 to 0.4.0 ([#147](https://github.com/ikornaselur/litime/issues/147)) ([c864198](https://github.com/ikornaselur/litime/commit/c86419878b3cef03f08d032a12f688336a50f425))
+
 ## [3.3.0](https://github.com/ikornaselur/litime/compare/v3.2.0...v3.3.0) (2024-10-28)
 
 
