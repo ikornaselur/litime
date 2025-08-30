@@ -10,7 +10,7 @@ pub struct Minute<'a> {
 
 include!(concat!(env!("OUT_DIR"), "/quotes.rs"));
 
-pub fn get_minute<'a>(time: &str, sfw: bool) -> Result<&'a Minute> {
+pub fn get_minute<'a>(time: &str, sfw: bool) -> Result<&'a Minute<'_>> {
     let options = include!(concat!(env!("OUT_DIR"), "/options.rs"));
 
     match options.len() {

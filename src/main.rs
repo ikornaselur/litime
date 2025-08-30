@@ -63,7 +63,7 @@ struct Args {
 
     /// The number of columns for the quote, before wrapping into another line.
     ///
-    /// If not set, then litime will try to detect the width of the terminal window, up to MAX_WIDTH (default 120 columns)
+    /// If not set, then litime will try to detect the width of the terminal window, up to `MAX_WIDTH` (default 120 columns)
     #[arg(short, long)]
     width: Option<u16>,
 
